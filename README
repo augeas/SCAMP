@@ -1,0 +1,44 @@
+
+                    _/_/_/    _/_/_/    _/_/    _/      _/  _/_/_/    
+                 _/        _/        _/    _/  _/_/  _/_/  _/    _/   
+                  _/_/    _/        _/_/_/_/  _/  _/  _/  _/_/_/      
+                     _/  _/        _/    _/  _/      _/  _/           
+              _/_/_/      _/_/_/  _/    _/  _/      _/  _/        
+
+                 Symbian Cellular Automata Machine in Python
+                      (C) Giles R. Greenway 15/04/2011.
+
+                           Released under GPL V3
+                    http://www.gnu.org/licenses/gpl.html
+
+"Python for S60" is copyright 2004-2009 Nokia Corporation, Symbian is a
+trademark of the Symbian Foundation Ltd. 
+
+SCAMP is a Python script for Symbian Series 60 smartphones that draws a variety
+of cellular automata. It works on S60 3rd and 5th editions, and tollerably well
+on on Symbian^3. To use it, just copy scamp.py and scampdocs to the memory card
+or flash drive of your phone, preferably in the Python directory. Run scamp.py
+from the PythonScript shell.
+
+A .sis installation file can be built as follows:
+
+1) Create a directory called scamp and copy scamp.py into it as default.py.
+
+2) Create a sub-directory called root and copy scampdocs into it.
+
+3) To change the documentation edit scamp.u in scampdocs and run udo:
+udo --html -o scamp.html scamp.u
+scamp.u and scamp.ulh can then be removed.
+
+4) The .sis file is created using ensymble.py in the Python for S60
+distribution. Come out of the scamp directory and execute:
+python2.5 ensymble.py py2sis --appname=SCAMP --icon=scamp.svg --version=15.4.11
+--heapsize=512K,8M --extrasdir=root scamp
+
+5) The .sis file can be merged with the Python runtime:
+python2.5 ensymble.py mergesis scamp_v15_4_11.sis Python_2.0.0.sis
+scamp_full_fat_v15_4_11.sis
+
+Python for Series 60 is available at: https://garage.maemo.org/projects/pys60
+UDO is available as a Debian package (http://www.debian.org/) or at:
+http://www.udo-open-source.org/
