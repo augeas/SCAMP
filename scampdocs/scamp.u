@@ -1,0 +1,567 @@
+
+!universal_charset [on]
+
+!ifdest [html]
+!define SUP <sup>
+!define sup </sup>
+!define cite <a href="biblio.html#(!1)">[(!1)]</a>
+!define ref <a name="(!1)">[(!1)]</a> <a href="(!3)">(!2)</a>
+!endif
+
+!docinfo [title] The Symbian Cellular Automata Machine in Python 
+!docinfo [program] SCAMP
+!docinfo [programimage] scamp.gif
+!docinfo [date]    Friday 15th April, 2011
+!docinfo [author] Giles R. Greenway
+
+
+!use_auto_subtocs    [info,html,stg,tvh,win,aqv]
+!use_auto_subsubtocs [info,html,stg,tvh,win,aqv]
+!no_effects          [asc]
+!use_justification   [asc]
+
+!html_merge_subsubsubnodes
+
+!language english
+
+!begin_document
+!maketitle
+!tableofcontents
+
+!node Acknowledgments
+
+!begin_itemize
+!item SCAMP is released under the Gnu Public License Version 3 (!cite[GPL]).
+!item "Python for S60" is copyright 2004-2009 Nokia Corporation, released under the Apache and Python Software Foundation Licenses (!cite[PyS60]).
+!item Symbian (!cite[Symbian]) is a trademark of the Symbian Foundation Ltd.
+!end_itemize
+
+Thanks to:
+!begin_itemize
+!item Jurgen Scheible for his Python for Series 60 tutorial (!cite[Scheible]).
+!item The various PyS60 compatibility layers that allowed development from Linux
+(!cite[KellyPS60]), (!cite[YemirPS60])
+!item Jose Antonio Oliveira and his progress bar class (!cite[Oliveira]).
+!item The UDO Universal Documentation Utility (!cite[UDO]).
+!item Meg, a real, grown-up software developer, who gave me the OLPC I wrote this on for Christmas (!cite[OLPC]).
+!end_itemize
+
+!node Introduction
+
+!subnode What's a cellular automaton?
+
+!begin_center
+(!I)"...For nothing is good unless you play with it. And all that is good, is nasty!"
+("What Is Soul,", "Under a Groove", Funked, 1969)(!i)
+!end_center
+
+Consider a regular array of cells, each with a fixed number of neighbours. It
+could be a one-dimensional row, a two-dimensional grid of squares, triangles
+or hexagons, or even a three-dimensional array. (SCAMP mostly deals only with one and
+two-dimensional square arrays.) In such a system, time passes in discrete
+steps. In any given instant, each cell can be in one of a finite number of
+states. Each cell's state in the next instant depends on its current state
+and those of its neighbours, according to a fixed set of rules. Such systems
+are called cellular automata. As well as having applications in mathematics
+and computer science, they have been used to model physical, chemical and
+biological systems. Beyond such serious academic disciplines, they are also
+amusing, aesthetic "mathematical recreations" and have been applied to art and
+music. The purpose of SCAMP is to allow experimentation and play with cellular
+automata, with uncertain degrees of utility or seriousness.
+
+!subnode Why? Are you some sort of maniac?
+
+!begin_center
+(!I)"Every few months we come across an amateur who, having discovered John Conway's wonderful game of LIFE, feels obliged to present the world with one more computer program to run LIFE simulations or with one more field report on LIFE's "bestiary" or ethology"." (Tommaso Toffoli (!cite[Toffoli2001])(!i))
+!end_center
+
+Yes. I wrote SCAMP because I wanted to have it to play with. What I'd really
+like to play with is the latest iteration in the long line of cellular
+automata machines by Toffoli and Margolus, (!cite[ToffoliMargolus87]) but
+there you go. Given the time I have on my hands, (virtually none) I needed
+a CA machine I could fiddle with on the train. Wolfram mentioned putting CAs
+on mobile devices on the website for his formidable tome "A New Kind of
+Science" (!cite[WolframNKS]). To what degree this is scholarship or vanity
+publishing is somewhat controversial. The pros and cons are weighed at great
+length by Ray Kurzweil (!cite[RayKurzwei]), more amusingly and mercifully
+briefly by Cosma Shalizi (!cite[CosmaShalizi]), and informatively by Lawrence
+Gray (!cite[GrayNKS]). 
+
+!subnode Things to do
+
+!begin_center
+(!I)"My obsession, it's my creation. You'll understand, it's not important now." (Souvenir, Orchestral Maneuvers in the Dark, 1981)(!i)
+!end_center
+
+SCAMP is hardly a priority for me, but I'd like to:
+
+!begin_itemize
+!item See what can be done about making SCAMP play nicely with Symbian^3. (The progress bars and on-line documentation are broken and the canvas size is wrong.)
+!item Make a custom seed editor, principally so that one can see the glory that is the r-pentomino in Conway's Life.
+!item Add second-order cellular automata, that look two generations into the past, instead of just one.
+!item Add more, possibly more aesthetic, implementations of the B-Z reaction.
+!item Add loads more cellular automata types in general.
+!item Consider doing the whole thing properly with the Hash-Life (!cite(Hash-Life) algorithm, engorged memory-hog that it is.
+!item Seriously consider error-trapping the "Create Rule" function properly.
+!item Make the source-code generally less risible.
+!item Look into the whole concept of "comment lines".
+!item Start the whole grizzly process again on Android.
+!end_itemize
+
+Don't hold your breath...
+
+!node Installing SCAMP
+
+A pair of .sis installation files have been made available, but they use the test-range of UIDs and the default, insecure certificate provided by the "ensymble" utility that comes with the latest PyS60 distribution. Despite this, they should work. If you do not have Python installed on your 'phone, the one that I've called "full-fat" has the Python interpreter/run-time bundled with it. Either download the relevant file from your 'phones browser directly, or copy it to the memory card or internal flash drive and open it with the file manager. Otherwise, install the latest version of the Python for Series 60 run-time and the PythonScript Shell (!cite[PyS60]) if you have not already done so, then copy "scamp.py" and the directory "scampdocs" from the source archive to the "Python" directory of your 'phone's memory card or internal flash drive. Start Python and then run the SCAMP script.
+
+!node What do all the buttons do?
+
+!begin_center
+(!I)"It's beautiful, -but useless. And as William Morris once said 'Nothing useless can be truly beautiful'" (Steve Coogan as Tony Wilson, "24 Hour Party People")(!i)
+!end_center
+
+The right-hand soft-key will always quit the program. The left-hand or "Options" soft-key brings up a menu whose choices are as follows: 
+
+!subnode Select Automaton
+
+The list of available automata is organized with the one-dimensional ones first. The screen draws from top to bottom, showing the evolution of the one-dimensional array with time. For two-dimensional automata, each frame is drawn line by line, or in a series of boxes if the current automaton has a "speed" parameter that has been set to one. See the "Simple 2-D" type for details. 
+
+!subnode Parameters
+
+This calls up a form allowing the individual parameters governing each automaton type to be set. These
+will vary for the different automata, but many of them will have some in common. Many automata types are defined by the binary digits (bits) of a "rule" parameter. See the "Simple 1-D" type for an explanation of the "history" parameter. For most two-dimensional automata, a "speed" parameter is set
+to (!B)1(!b) by default, the image is divided into a series of squares, only those containing cells that changed state on the last iteration are updated. 
+
+!subnode Draw
+
+This draws the currently selected automaton. Mostly, this should produce reasonably interesting results, but sometimes they can be improved by playing with the "seed" settings. While drawing the "Options" menu changes. The choices vary according to the selected automaton, among them are:
+
+!subsubnode Snapshot
+
+This waits for the current frame to finish, and then saves the image in the selected directory. The file-name will be the name of the current automaton, followed by its parameters separated by underscores.
+
+!subsubnode Start Recording
+
+This prompts for an interval between saved frames. A directory is created with the name of the current automaton, followed by its parameters separated by underscores. This is where the individually numbered images are stored. Once selected, this item changes to "Stop Recording".
+
+!subsubnode Finish
+
+This waits for the current frame to finish drawing, then stops and returns to the main-menu.
+
+!subsubnode Stop
+
+This stops drawing instantly and returns to the main-menu.
+
+!subnode Seed
+
+Some automata allow the initial conditions of their array to be set up, making the "Seed" option available. The seeds for one-dimensional automata are: "Single Defects", "Alternating Blocks" and "Random". Two-dimensional seeds include: "Single Defects", Tabula Rasa" and "Random".
+
+!subnode Seed Parameters
+
+Each seed type takes certain parameters. Initially, both one and two-dimensional automata default to a single cell in state (!B)1(!b) or "defect" in the centre of the array with all others set to (!B)0(!b).
+
+!subsubnode One-Dimensional Seeds
+
+!subsubsubnode Single Defects
+
+"Number" gives the number of cells that will be set to (!B)1(!b). "Separation", if non-zero, gives the number of vacant cells between them, otherwise they are equally spaced as far apart as possible. If "justify" has the default value of 0 then the array of (!B)1(!b)s is centered, 1 shifts it to the left and 2 to the right.
+
+!subsubsubnode Alternating Blocks
+
+This produces dashed lines of cells in state (!B)1(!b). "On" gives the length of each dash and "off" the size of the gaps between them. "Number" sets the number of dashes, if set to 0 then the line spans the entire array.
+
+!subsubsubnode Random
+
+This produces a random centered band of (!B)1(!b)s and (!B)0(!b)s. "Probability" is the chance of a cell being set to state (!B)1(!b) out of 1000, "width" sets the width of the band, which spans the array if set to 0.
+
+!subsubnode Two-Dimensional Seeds
+
+!subsubsubnode Single Defects
+
+This produces a two-dimensional array of (!B)1(!b)s on a background of (!B)0(!b)s. "xnumber" and "ynumber" set the numbers of columns and rows, "xsep" and "ysep" give the distances between them, which are maximized for a value of 0.
+
+!subsubsubnode Tabula Rasa
+
+This just leaves an array of (!B)0(!b)s, which is most useful for the "Langton's Ant" and "Turmites" automaton types.
+
+!subsubsubnode Random
+
+"Probability" sets the chance of each being initially set to state (!B)1(!b) out of 1000.
+
+!subnode Draw and Record
+
+This allows the recording of each frame of an automaton to start as soon as drawing starts, similar to the "Start Recording" option in the drawing menu. As before, the interval between saved frames is prompted for.
+
+!subnode Create Rule
+
+Many of the automaton types work by using a "rule" parameter, with each bit corresponding to a possible
+combination of states of a cell and its neighbours. For the "Simple 1-D" type, each cell has two neighbours, with eight combinations for each block of three, so the rule parameter has eight bits and therefore 256 possible values. For automata with larger numbers of neighbours, the number of possible
+values of the "rule" parameter becomes very large. Exploring them would be very tedious, so a more intelligent way of generating the values is needed. This option prompts for a logical expression, a
+function of the state of each cell and its neighbours. If the result of this is "true" or non-zero, the
+cells new state will be (!B)1(!b) or (!B)0(!b) if it is zero or "false". This feature is available
+for the "Simple 1-D", "Next-Nearest 1-D", "Simple 2-D" and "Next-Nearest 2-D" types. It doesn't have the flexibility of Toffoli and Margolus' FORTH-based CAM, (!cite[ToffoliMargolus87])
+but it'll do. The following variables can be used in each type:
+
+!begin_center
+!begin_table [|l|l|] !hline
+Simple 1-D !! w c e
+Next-Nearest 1-D !! ww w c e ee
+Simple 2-D !! c n w s e
+Next-Nearest 2-D !! c n ne e se s sw w nw
+!end_table
+!end_center
+
+These are the operators that are available:
+
+!begin_center
+!begin_table [|l|l|] !hline
++ - * !! addition, subtraction, multiplication
+/ !! integer or truncated division
+% !! modular division (gives remainder)
+^ !! raise to power
+a o x ! !! logical AND, OR, XOR, NOT
+& | $ !! bit-wise AND, OR, XOR
+< > !! less or greater than (returns (!B)1(!b) if true, else (!B)0(!b))
+= !! equal to (returns (!B)1(!b) if true, else (!B)0(!b))
+( ) !! brackets
+!end_table
+!end_center
+
+Note: SCAMP has the most shonky implementation of Dijkstra's Shunting Algorithm (!cite[Dijkstra]) imaginable, adding new automata is much more fun than error-trapping.
+
+!subnode Palette
+
+This presents a choice of lurid colour schemes for your delectation. Many automata types will remain
+black-and-white unless the history parameter is non-zero.
+
+!subnode Resolution
+
+SCAMP is not especially fast, so it can be more amusing if the display resolution is degraded somewhat to improve the frame-rate. Some automata may even be more aesthetically pleasing this way.
+
+!subnode Set Background
+
+Most automata types overwrite the entire display, so this option often has no effect. For those that do not, the background may be set to black, white, or the zeroth colour of the selected palette.
+
+!subnode Save
+
+This saves the currently displayed image, the file-name is the name of the currently selected automaton, followed by its parameters separated by underscores.
+
+!subnode Path
+
+This chooses the drive where images are saved.
+
+!subnode Help
+
+This shows you a short note about SCAMP, or should display the entirely edifying document you are now reading in your 'phone's browser, "About this automaton" will produce vaguely context-sensitive help. 
+
+!node One-dimensional cellular automata
+
+!begin_center
+(!I)"He said, ''I dream of colour music, And the intricacies of the machines that make it possible''"
+("Sex with Sun-Ra", "Black Antlers", Coil 2004)(!i)
+!end_center
+
+!subnode Simple 1-D
+
+!html_name sim_1d
+
+This is the simplest possible cellular automaton, but it still has very interesting properties. Consider a cell in a one-dimensional array and its two neighbours, West and East. If each cell has two possible states (!B)0(!b) and (!B)1(!b), there are 8 combinations (2x2x2 or 2(!SUP)3(!sup)) for each block of three cells. We could say that each cell is a (!I)binary digit(!i) or (!I)bit(!i), and that 3 bits are sufficient to represent the 8 numbers from 0 to 7. Binary is base 2, the 0th bit is the units column, the 1st is the twos column and the 2nd is the fours column. 
+
+!begin_center
+!begin_table [|c|c|c|c|] !hline
+!! 2(!SUP)2(!sup) !! 2(!SUP)1(!sup) !! 2(!SUP)0(!sup)
+!! 4 !! 2 !! 1
+0 !! 0 !! 0 !! 0
+1 !! 0 !! 0 !! 1
+2 !! 0 !! 1 !! 0
+3 !! 0 !! 1 !! 1
+4 !! 1 !! 0 !! 0
+5 !! 1 !! 0 !! 1
+6 !! 1 !! 1 !! 0
+7 !! 1 !! 1 !! 1
+!end_table
+!end_center
+
+The rule for the system must determine the future state of each cell at the centre of each block of three. The are two possibilities for each of the eight combinations so there are 256 (2(!SUP)8(!sup)) possible rules. The "rule" parameter can take one of the 256 values from 0 to 255 and can be represented by 8 bits or a (!I)byte(!i). Each bit corresponds to one of the 8 combinations of 3 cells. If the bit corresponding to the states of a cell and its neighbours is set to (!B)1(!b), then the cell's next state will also be set to (!B)1(!b). A two-dimensional image is produced by using each successive line from top to bottom to show the evolution of the array of cells. The array wraps around so that the Eastern neighbour of the East-most cell is the West-most cell. This is sometimes called a (!I)periodic boundary condition(!i), and the array can be thought of as a ring.
+
+Each of the 256 patterns of bits can be inverted and reflected, so there are really only 64 distinct rules. By default, SCAMP starts with rule 30 with the initial state of the centre cell set to (!B)1(!b). Both the numbering convention and rule 30 were popularized by Wolfram (!cite[Wolfram30]). Its pattern is chaotic, and although by definition it is not random, it has formed the basis of random number generators. The next most notable rule is 110, which a somewhat controversial proof has shown to be (!I)universal(!i) or (!I)Turing complete(!i), that is capable (in principle) of performing any computational task (!cite[Martinez110]). Rule 90 produces a (!I)Sierpinksi Gasket(!i), which is also produced by many other cellular automaton rules (!cite[Bourke93]). Other values will produce interesting or aesthetic results. 
+
+The "history" parameter allows a cell to be coloured on the basis of its past and present states. A value of 0 just plots cells in black and white depending on whether they are set to (!B)1(!b) or (!B)0(!b). Positive values use that number of bits plus one to represent each cell, so a value of 2 will produce 2(!SUP)2+1(!sup) = 8 colours. After each generation, the number representing a cell is shifted one bit to the left, with the 0th bit taking the cell's new state. Negative values have a different effect. A value of -8 will produce 8 colours. The 0th colour is used if a cell's state is (!B)0(!b), other colours indicate for how many intervals the cell has been in state (!B)1(!b).
+
+!subnode Next-Nearest 1-D
+
+!html_name nn_1d
+
+The "Next-Nearest 1-D" type has the same "rule" and "history" parameters as the "Simple 1-D" type. We can allow a cell in a one-dimensional array to have more than two neighbours:
+
+!begin_center
+!begin_table [|c|c|c|c|c|] !hline
+ww !! w !! c !! e !! ee
+!end_table
+!end_center
+
+The centre cell (c) has a neighbour West of West (ww) and East of East (ee). If each cell has two states there are 2(!SUP)5(!sup) = 32 possible combinations so there are 2(!SUP)32(!sup) = 4294967296 possible rules. Searching through all of these to find the ones that produce aesthetic results is a somewhat thankless task. To this end, a somewhat more sophisticated means of specifying rules is provided by the "Create Rule" menu option.  
+
+!subnode Totalistic 1-D
+
+!html_name total_1d
+
+Consider a one-dimensional cellular automata with some number of states (!I)N(!i). If we consider only the East and West neighbours, that gives (!I)N(!i)(!SUP)3(!sup) combinations and (!I)N(!i)(!SUP)(!I)N(!i)(!SUP)3(!sup)(!sup) possible rules. This means that there number of 4-state nearest-neighbour automata is:
+
+!begin_center
+340282366920938463463374607431768211456!
+!end_center
+
+With this in mind, Wolfram introduces (!I)totalistic cellular automata(!i) based on the sum of the states of a cell and its nearest-neighbours (!cite(WolframTotal)]. The "Totalistic 1-D" takes two parameters, the "order" or number of states and the "rule". If there are (!I)N(!i) states from 0 to (!I)N(!i)-1, the total cannot be greater than 3(!I)N(!i)-3, although some values less than this may not be possible. A string of digits base-(!I)N(!i) is used to decide the next state of each cell, by using the total (!I)n(!i) to select the (!I)n(!i)th digit. The base-(!I)N(!i) number is converted to decimal to produce the rule. SCAMP defaults to order 3 number 65, which starts out fairly interesting, but eventually becomes repetitive. 
+
+!subnode Pascal's Triangle
+
+!html_name pascal
+
+Pascal's Triangle (!cite[PascalFun]) is constructed such that starting with 1 at the top, each number is the sum of the two directly above it:
+
+!begin_center
+1
+
+1 1
+
+1 2 1
+
+1 3 3 1
+
+1 4 6 4 1
+!end_center
+
+The number of patterns, applications and coincidences related to it is almost beyond counting. Eventually, the numbers in each row start to get rather large, so we will consider Pascal's triangle using (!I)modular arithmetic(!i). This means that each entry is the remainder when the sum of the two entries above is divided by some number or (!I)modulo(!i). This makes Pascal's Triangle a special kind of totalistic cellular automaton on a hexagonal grid. SCAMP does this with square cells by offsetting each row to keep it centered. The Pascal's Triangle type takes two parameters, "modulo" and "colours", which can be 0 or 1. If "colours" is 0 a cell is plotted black if its value is non-zero. If "modulo" is greater than 2 and "colours" is set to 1 then each cell is simply coloured according to its state. Modulo 2 produces the all-too-familiar Sierpinski Gasket.
+
+As SCAMP needs one more cell after every row, it draws to the bottom of the screen without wrapping and stops. It also ignores the current seed, and starts with a (!B)1(!b) in the initial central cell.
+
+!subnode Skewed Pascal's Triangle
+
+!html_name skew_pascal
+
+This version of Pascal's Triangle skews each row so that it fits on a square grid, forming a right-angled triangle. The "modulo" and "colours" parameters are unchanged, but the colours are over-ridden by the "history" parameter if it is non-zero. This time, the plot wraps and scrolls and the "seed" settings are honored.
+
+!begin_center
+!begin_table [|c|c|c|c|c|] !hline
+0 !! 0 !! 0 !! 0 !! 1
+0 !! 0 !! 0 !! 1 !! 1
+0 !! 0 !! 1 !! 2 !! 1
+0 !! 1 !! 3 !! 3 !! 1
+1 !! 4 !! 6 !! 4 !! 1
+!end_table
+!end_center
+
+!subnode Cyclic 1-D
+
+!html_name cyclic_1d
+
+In cyclic cellular automata cells can only switch states in sequence. A cell in state (!I)N(!i) takes
+the state (!I)N(!i)+1 if it has a neighbour in state (!I)N(!i)+1. The highest state changes to the first state. The "order" parameter gives the number of states, the cells' initial states are chosen randomly, ignoring the seed settings. Values of four (!cite[PrimordialCyclic]) (and sometimes 5) can produce aesthetic results, that look almost, but not entirely (!I)unlike(!i) a Bridget Riley. If the "neighbours" parameter is set to 1 then one can "cheat" by also considering next-nearest neighbours.
+
+!node Two-dimensional cellular automata
+
+!begin_center
+(!I)"If the rule you followed brought you to this, of what use was the rule?" (Anton Chigurh, "No Country for Old Men", Cormac McCarthy)(!i)
+!end_center
+
+!subnode Simple 2-D
+
+!html_name sim_2d
+
+!begin_center
+!begin_table [|c|c|c|] !hline
+!! N !!
+W !! C !! E
+!! S !!
+!end_table
+!end_center
+
+A cell in a two-dimensional square lattice has four nearest-neighbours in the cardinal directions North, East, South and West. Since this gives five states, there is a similar number of possible rules to that of the next-nearest one-dimensional automata. Again, use of the "Create Rule" function will yield more interesting results than searching through all the permutations of the "rule" parameter.
+The "history" parameter works as before. The "speed" parameter takes the default value of one. SCAMP does not produce 2D images (or indeed do anything) especially quickly. Many rules will not cause a cell to take a state of (!B)1(!b) unless it has at least one neighbour in this state, ignoring this is a great waste of effort. Setting "speed" to 1 causes only cells that changed in the last iteration to be updated. In the next interval the cells next to these are considered, and so on. If a cell with no live neighbours could be given a value of (!B)1(!b), "speed" should be set to 0. By default, SCAMP starts out with the parity rule (!cite[Parity]), generated by entering
+the expression (!B)(n+s+w+e+c)%2(!b) when using the "Create Rule" function.
+
+!subnode Next-Nearest 2-D
+
+!html_name nn_sim_2d
+
+!begin_center
+!begin_table [|c|c|c|] !hline
+nw !! n !! ne
+w !! c !! e
+sw !! s !! se
+!end_table
+!end_center
+
+If the nine cells C, N, NE, E, SE, S, SW, W, and NW are considered, the number of possible rules becomes enormous. The number of bits needed to specify each rule will be 2(!SUP)9(!sup) = 512, so the total number of rules will be 2(!SUP)512(!sup). The decimal expression of 512-bit integers is so long that the "Create Rule" option cannot be used as before. The rule is expressed by the "code" parameter as a string of characters. The "history" and "speed" parameters work as before.
+
+!subnode Totalistic 2-D
+
+!html_name total_2d
+
+A cell in a two-dimensional square lattice can have a maximum of eight nearest and next-nearest neighbours. Totalistic rules can therefore be specified by two single-byte integers; "d_rule" or the "dead rule" specifies what happens if a cell has a state of (!B)0(!b), "l_rule" or the "live rule" describes cell in state (!B)1(!b). If the bit corresponding to a cell's number of live neighbours is set then that cell will be live in the next interval. The "history" and "speed" parameters have their usual meanings. If "neighbours" is set to 1, then next-nearest neighbours are considered, otherwise the last four bits of the rule are ignored. If "d_rule" is odd, then a dead cell can be activated if it has no live neighbours, so "speed" should be set to 0.
+
+!begin_center
+!begin_table [|c|c|c|c|c|c|c|c|c|] !hline
+2(!SUP)7(!sup) !! 2(!SUP)6(!sup) !! 2(!SUP)5(!sup) !! 2(!SUP)4(!sup) !! 2(!SUP)3(!sup) !! 2(!SUP)2(!sup) !! 2(!SUP)1(!sup) !! 2(!SUP)0(!sup) !! rule
+(!B)0(!b) !! (!B)0(!b) !! (!B)0(!b) !! (!B)0(!b) !! (!B)1(!b) !! (!B)1(!b) !! (!B)0(!b) !! (!B)0(!b) !! 12
+(!B)1(!b) !! (!B)1(!b) !! (!B)1(!b) !! (!B)1(!b) !! (!B)0(!b) !! (!B)0(!b) !! (!B)0(!b) !! (!B)0(!b) !! 240
+!end_table
+!end_center
+
+Many of the 2(!SUP)16(!sup) = 65536 combinations of rules produce interesting results when seeded with a single live, central cell. If both rules are set to 12 (or 240 if next-nearest neighbours are enabled) a cell will change to the state of the majority of its neighbours. The resulting behaviour is quite interesting with a random seed.
+
+!subnode Conway's Life
+
+!html_name conlife
+
+Life is a totalistic cellular automaton introduced by mathematician John Conway in 1970 (!cite[LifeWiki]). Although not the first cellular automaton, it is certainly the most widely known and celebrated. Life is "Turing Complete", in principal it may be used to carry out any computation. It behaviour is as rich and complex as its rules are simple: A live cell will only remain so if it has two or three live cells among its eight neighbours. A dead cell will become live if it has three live neighbours. The patterns produced by Life have been characterized as "oscillators, methusalahs, guns, gliders, puffers, spaceships and rakes" (!cite[LifeLex]). Currently, the only control SCAMP gives over the initial conditions is the "occupancy" parameter, the chance of a cell being live out of 1000. There are no seed settings, "history" has its usual meaning.
+ 
+!subnode Brian's Brain
+
+!html_name bbrain
+
+Brian's Brain is a three-state totalistic cellular automaton introduced by Brian Silverman (!cite[Resnick96]). The three states are "live" (white), "dying" (red) and "dead" (black). A dead cell becomes live if two of its eight neighbours are live. Live cells become dying and dying become dead. The resulting behaviour is highly dynamic, with a variety of patterns moving across the grid. There is only one parameter, "occupancy" gives the chance of a cell being initially live out of 1000. 
+
+!subnode Cyclic Demons
+
+!html_name cyc_demon
+
+This cyclic cellular automaton was popularized by Dewdney in his "Computer Recreations" column in Scientific American (!cite[MagMach]). A cell in state (!I)n(!i) of (!I)N(!i) changes to state (!I)n(!i)+1 if one of its neighbours is in that state. State (!I)N(!i) becomes state 0. Initially, each cell is in a uniformly distributed random state. The "order" parameter gives the number of states and "neighbours" chooses between four or eight neighbours when set to 0 or 1. Eventually, the initial granular noise gives way to "droplets" of colour and finally spiral formations or "demons".  
+
+!subnode Langton's Ant
+
+!html_name langton
+
+Langton's Ant is a special type of cyclic cellular automaton where only one cell, the "ant", updates at a time. The ant starts in the centre of the grid in a certain heading. According to the state of the cell the ant turns left or right, changes the cell to the next state (the highest state becomes state 0) and takes one step forward. The "order" parameter gives the number of states, "number" determines the direction the ant turns in each state. If the ant is in state (!I)n(!i) it turns right if the (!I)n(!i)th bit of "number" is set, else it turns left. The number of steps before the image is updated is given by "dt", "neighbours" chooses between four (0, the more interesting option) and eight (1) directions. Many ants will settle down to a repetitive sequence of moves called a "highway", with the problem of whether they do or not being analogous to the "halting problem" for Turing machines (!cite[AntyParticles]). This has not been decided for the 5th 3-state ant. Starting from an empty grid, Langton's ant will produce periodically symmetrical patterns if the number of states is even and the rule bits consists of pairs of ones or zeroes, with the bits considered cyclically (!cite[TravelAnt]):
+
+!begin_center
+!begin_table [|r|r|r|] !hline
+order !! bits !! number
+4 !! 0011 !! 3
+4 !! 0110 !! 6
+4 !! 1001 !! 9
+6 !! 001100 !! 12
+6 !! 110011 !! 51
+6 !! 100001 !! 33
+!end_table
+!end_center
+
+!subnode Turmites
+
+!html_name turmites
+
+"Turmites" are two-dimensional Turing machines (!cite[Turing2d]) or "Turing Mites" (!cite[Tmites]), similar to Langton's ant. The turmites implemented here have two internal states and two external states or "colours" on the grid. The turmite's internal state and that of the cell it occupies determines the future of these states and how its heading changes. The changes in heading are described by two bits:
+
+!begin_center
+!begin_table [|l|l|] !hline
+heading change !! bits
+none !! 00
+turn left !! 01
+turn right !! 10
+reverse !! 11
+!end_table
+!end_center
+
+The turmite is specified by a 16-bit integer in four 4-bit "nibbles":
+
+!begin_center
+!begin_table [|l|l|l|l|] !hline
+bit !! 3 !! 2-1 !! 0
+meaning !!  new colour !! heading change !! new state
+!end_table
+!end_center
+
+The nibbles are combined as follows:
+
+!begin_center
+!begin_table [|l|l|l|] !hline
+!! colour 0 !! colour 1
+state 0 !! 3 !! 2
+state 1 !! 1 !! 0
+!end_table
+!end_center
+
+The "rule" parameter gives the 16-bit integer, "neighbours", "history" and "dt" have their previous meanings. Starting from an empty grid, the following rules are quite interesting: 52481, 48080, 44355, 56276, 54665, 39632.
+
+!subnode B-Z Reaction
+
+!html_name bzr
+
+This is another cyclic automata popularized by Dewdney in Scientific American as the "Hodge-Podge Machine" (!cite[MagMach]), designed to simulate the Belousov-Zhabotinsky chemical reaction. The algorithm (!cite[DewdneyBZR]) starts with cells in random states, the number of which is given by the "order" parameter. The 0th state is said to be "healthy", the maximum state is "ill", with other values classed as "infected". In each generation all ill cells become healthy. Healthy cells take on a state given by (!I)a/k1 + b/k2(!i) where the fractional part of each division is discarded, (!I)a(!i) and (!I)b(!i) are the numbers of infected and ill cells and "k1" and "k2" are chosen parameters. Ill states take on a state given by (!I)s/(a+b+1) + g(!i), again integer division is used, (!I)a(!i) and (!I)b(!i) have the same meanings,  (!I)s(!i) is the sum of the states of the cell and its neighbours and "g" is the final parameter.
+
+!ifdest [html]
+!node References
+!html_name biblio
+!endif
+
+(!ref[GPL][The Gnu General Public License][http://www.gnu.org/licenses/gpl.html])
+
+(!ref[PyS60][Python for Series 60][https://garage.maemo.org/projects/pys60])
+
+(!ref[Symbian][Symbian at Nokia][http://symbian.nokia.com])
+
+(!ref[Schieble][Python for Series 60 Tutorial][http://www.mobilenin.compys60/menu.htm])
+
+(!ref[KellyPS60][Python for S60 Compatability Layer][https://github.com/ivankelly/py60])
+
+(!ref[YemirPS60][PyS60 Emulation Library][http://sourceforge.net/projects/pys60-compat])
+
+(!ref[UDO][UDO -Unbiversal Documentation Utility][http://www.udo-open-source.org/])
+
+(!ref[Oliveira][A simple progressbar implementation in Python, Croozeus 'blogs.][http://croozeus.com/blogs?p=103])
+
+(!ref[OLPC][The One Laptop Per Child Project][http://wiki.olpc.com])
+
+(!ref[ToffoliMargolus87][Tommaso Toffoli and Norman Margolus, "Cellular automata machines: a new environment for modelling", MIT Press 1987.][http://books.google.com/books?id=HBlJzrBKUTEC&lpg=PR11&ots=B7rGLXV6Xb&dq=toffoli%20margolus%20cellular%20automata&lr&pg=PP1#v=onepage&q&f=false])
+
+(!ref[WolframNKS][Stephen Wolfram, "A New Kind of Science"][http://www.wolframscience.com/])
+
+(!ref[RayKurzweil][Ray Kurzweil, "Reflections on Stephen Wolfram's A New Kind of Sscience"][http://www.kurzweilai.net/reflections-on-stephen-wolfram-s-a-new-kind-of-science])
+
+(!ref[CosmaShalizi][Cosma Shalizi,"A Rare Blend of Monster Raving Egomania and Utter Batshit Insanity"][http://www.cscs.umich.edu/!~crshalizi/reviews/wolfram/])
+
+(!ref[GrayNKS][Lawrence Gray, A Mathematician Looks at Wolfram's New Kind of Science, Notice of the AMS, Vol 50, No 2, pg 200, 2003.][http://www.math.umm.edu/~gray/pdf/wolfram.pdf])
+
+(!ref[Hash-Life][An Algorithm for Compressing Space and Time, Dr Dobb's Journal][http://www.ddj.com/dept/ai/184406478])
+
+(!ref[Toffoli2001][Tommaso Toffoli, "A common language for "programmable matter", cellular automata and all that", AI*IA, Vol 14, No 2, pg 32, 2001.][http://pm1.bu.edu/~tt/publ/aiia.pdf])
+
+(!ref[Dijkstra][Original description of Dijkstra's shunting yard algorithm.][http://www.cs.utexas.edu/!~EWD/MCReps/MR35.PDF])
+
+(!ref[Wolfram30][Rule 30 from Wolfram MathWorld.][http://mathworld.wolfram.com/Rule30.html])
+
+(!ref[Martinez110][Genaro Juárez Martínez, "Cyclic Tag System in Rule 110".][http://uncomp.uwe.ac.uk/genaro/rule110/ctsRule110.html])
+
+(!ref[Bourke83][Paul Bourke, "Sierpinski Gasket"][http://local.wasp.uwa.edu.au/~pbourke/fractals/gasket/)]
+
+(!ref[WolframTotal][Totalistic Cellular Automata from Wolfram MathWorld][http://mathworld.wolfram.com/TotalisticCellularAutomaton.html])
+
+(!ref[PascalFun][Pascal's Triangle at Maths is Fun][http://www.mathsisfun.com/pascals-triangle.html])
+
+(!ref[PrimordialCyclic][The 4-Color CCA in One Dimension at the Primordial Soup Kitchen][http://psoup.math.wisc.edu/archive/recipe29.html])
+
+(!ref[Parity][The Parity Rule at The Software Collidoscope Foundry][http://www.collidoscope.com/modernca/parityrules.html])
+
+(!ref[LifeWiki][Life Wiki][http://www.conwaylife.com/wiki/])
+
+(!ref[LifeLex][Stephen Silver's Life Lexicon][http://www.argentum.freeserve.co.uk/life.htm])
+
+(!ref[Resnick96][Mitchel Resnick and Brian Silverman, "Exploring Emergence: The Brain Rules".][http://www.media.mit.edu/groups/el/projects/emergence/index.html])
+
+(!ref[MagMach][A. K. Dewdney, "The Magic Machine".][http://tinyurl.com/DewdneyMagMach])
+
+(!ref[DewdneyDemons][A. K. Dewdney, "The Demons of Cyclic Space".][http://tinyurl.com/DewdneyDemons])
+
+(!ref[AntyParticles][Ian Stewart, "Mathematical Recreations"][http://tinyurl.com/antyparticles])
+
+(!ref[TravelAnt][Gale, Propp, Sutherland and Troubetzkoy "Further Travels with My Ant"][http://www.math.sunysb.edu/cgi-bin/preprint.pl?ims95-1])
+
+(!ref[Turing2d][Ed Pegg "2D Turing Machines", The Mathematical Association of America][http://www.maa.org/editorial/mathgames/mathgames_06_07_04.html])
+
+(!ref[Tmites][Wolfram MathWorld][http://mathworld.wolfram.com/Turmite.html])
+
+(!ref[DewdneyBZR][Hemetic Systems][http://www.hermetic.ch/pca/algorithms.htm#bz1])
+
+!end_document
+

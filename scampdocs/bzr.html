@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: B-Z Reaction
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_2d.html" title="6.1 Simple 2-D">
+<link rel="section" href="nn_sim_2d.html" title="6.2 Next-Nearest 2-D">
+<link rel="section" href="total_2d.html" title="6.3 Totalistic 2-D">
+<link rel="section" href="conlife.html" title="6.4 Conway's Life">
+<link rel="section" href="bbrain.html" title="6.5 Brian's Brain">
+<link rel="section" href="cyc_demon.html" title="6.6 Cyclic Demons">
+<link rel="section" href="langton.html" title="6.7 Langton's Ant">
+<link rel="section" href="turmites.html" title="6.8 Turmites">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="turmites.html" title="Turmites">
+<link rel="previous" href="turmites.html" title="Turmites">
+<link rel="next" href="biblio.html" title="References">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="turmites.html"><img src="udo_lf.gif" alt="Turmites" border="0" width="24" height="24"></a>
+<a href="biblio.html"><img src="udo_rg.gif" alt="References" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="B-Z_20Reaction">6.9 B-Z Reaction</a></h1>
+<p>This is another cyclic automata popularized by Dewdney in
+Scientific American as the &quot;Hodge-Podge Machine&quot; <a
+href="biblio.html#MagMach">[MagMach]</a>, designed to simulate the
+Belousov-Zhabotinsky chemical reaction. The algorithm <a
+href="biblio.html#DewdneyBZR">[DewdneyBZR]</a> starts with cells in
+random states, the number of which is given by the &quot;order&quot;
+parameter. The 0th state is said to be &quot;healthy&quot;, the
+maximum state is &quot;ill&quot;, with other values classed as
+&quot;infected&quot;. In each generation all ill cells become healthy.
+Healthy cells take on a state given by <i>a/k1 + b/k2</i> where the
+fractional part of each division is discarded, <i>a</i> and <i>b</i>
+are the numbers of infected and ill cells and &quot;k1&quot; and
+&quot;k2&quot; are chosen parameters. Ill states take on a state given
+by <i>s/(a+b+1) + g</i>, again integer division is used, <i>a</i>
+and <i>b</i> have the same meanings, <i>s</i> is the sum of the
+states of the cell and its neighbours and &quot;g&quot; is the final
+parameter.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="turmites.html"><img src="udo_lf.gif" alt="Turmites" border="0" width="24" height="24"></a>
+<a href="biblio.html"><img src="udo_rg.gif" alt="References" border="0" width="24" height="24"></a>
+</body></html>

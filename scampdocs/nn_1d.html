@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Next-Nearest 1-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_1d.html" title="5.1 Simple 1-D">
+<link rel="section" href="total_1d.html" title="5.3 Totalistic 1-D">
+<link rel="section" href="pascal.html" title="5.4 Pascal's Triangle">
+<link rel="section" href="skew_pascal.html" title="5.5 Skewed Pascal's Triangle">
+<link rel="section" href="cyclic_1d.html" title="5.6 Cyclic 1-D">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="sim_1d.html" title="Simple 1-D">
+<link rel="previous" href="sim_1d.html" title="Simple 1-D">
+<link rel="next" href="total_1d.html" title="Totalistic 1-D">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="sim_1d.html"><img src="udo_lf.gif" alt="Simple 1-D" border="0" width="24" height="24"></a>
+<a href="total_1d.html"><img src="udo_rg.gif" alt="Totalistic 1-D" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Next-Nearest_201-D">5.2 Next-Nearest 1-D</a></h1>
+<p>The &quot;Next-Nearest 1-D&quot; type has the same
+&quot;rule&quot; and &quot;history&quot; parameters as the
+&quot;<a href="sim_1d.html">Simple 1-D</a>&quot; type. We can allow a cell in a one-dimensional
+array to have more than two neighbours:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="center" valign="top">ww</td>
+  <td align="center" valign="top">w</td>
+  <td align="center" valign="top">c</td>
+  <td align="center" valign="top">e</td>
+  <td align="center" valign="top">ee</td>
+</tr>
+</table></div>
+
+<p>The centre cell (c) has a neighbour West of West (ww) and East of
+East (ee). If each cell has two states there are 2<sup>5</sup> = 32
+possible combinations so there are 2<sup>32</sup> = 4294967296
+possible rules. Searching through all of these to find the ones that
+produce aesthetic results is a somewhat thankless task. To this end, a
+somewhat more sophisticated means of specifying rules is provided by
+the &quot;<a href="004007.html">Create Rule</a>&quot; menu option.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="sim_1d.html"><img src="udo_lf.gif" alt="Simple 1-D" border="0" width="24" height="24"></a>
+<a href="total_1d.html"><img src="udo_rg.gif" alt="Totalistic 1-D" border="0" width="24" height="24"></a>
+</body></html>

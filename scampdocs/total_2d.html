@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Totalistic 2-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_2d.html" title="6.1 Simple 2-D">
+<link rel="section" href="nn_sim_2d.html" title="6.2 Next-Nearest 2-D">
+<link rel="section" href="conlife.html" title="6.4 Conway's Life">
+<link rel="section" href="bbrain.html" title="6.5 Brian's Brain">
+<link rel="section" href="cyc_demon.html" title="6.6 Cyclic Demons">
+<link rel="section" href="langton.html" title="6.7 Langton's Ant">
+<link rel="section" href="turmites.html" title="6.8 Turmites">
+<link rel="section" href="bzr.html" title="6.9 B-Z Reaction">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="nn_sim_2d.html" title="Next-Nearest 2-D">
+<link rel="previous" href="nn_sim_2d.html" title="Next-Nearest 2-D">
+<link rel="next" href="conlife.html" title="Conway's Life">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_sim_2d.html"><img src="udo_lf.gif" alt="Next-Nearest 2-D" border="0" width="24" height="24"></a>
+<a href="conlife.html"><img src="udo_rg.gif" alt="Conway's Life" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Totalistic_202-D">6.3 Totalistic 2-D</a></h1>
+<p>A cell in a two-dimensional square lattice can have a maximum of
+eight nearest and next-nearest neighbours. Totalistic rules can
+therefore be specified by two single-byte integers; &quot;d_rule&quot;
+or the &quot;dead rule&quot; specifies what happens if a cell has a
+state of <b>0</b>, &quot;l_rule&quot; or the &quot;live rule&quot;
+describes cell in state <b>1</b>. If the bit corresponding to a
+cell's number of live neighbours is set then that cell will be live in
+the next interval. The &quot;history&quot; and &quot;speed&quot;
+parameters have their usual meanings. If &quot;neighbours&quot; is set
+to 1, then next-nearest neighbours are considered, otherwise the last
+four bits of the rule are ignored. If &quot;d_rule&quot; is odd, then
+a dead cell can be activated if it has no live neighbours, so
+&quot;speed&quot; should be set to 0.
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="center" valign="top">2<sup>7</sup></td>
+  <td align="center" valign="top">2<sup>6</sup></td>
+  <td align="center" valign="top">2<sup>5</sup></td>
+  <td align="center" valign="top">2<sup>4</sup></td>
+  <td align="center" valign="top">2<sup>3</sup></td>
+  <td align="center" valign="top">2<sup>2</sup></td>
+  <td align="center" valign="top">2<sup>1</sup></td>
+  <td align="center" valign="top">2<sup>0</sup></td>
+  <td align="center" valign="top">rule</td>
+</tr>
+<tr>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top">12</td>
+</tr>
+<tr>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>1</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top"><b>0</b></td>
+  <td align="center" valign="top">240</td>
+</tr>
+</table></div>
+
+<p>Many of the 2<sup>16</sup> = 65536 combinations of rules produce
+interesting results when seeded with a single live, central cell. If
+both rules are set to 12 (or 240 if next-nearest neighbours are
+enabled) a cell will change to the state of the majority of its
+neighbours. The resulting behaviour is quite interesting with a random
+seed.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_sim_2d.html"><img src="udo_lf.gif" alt="Next-Nearest 2-D" border="0" width="24" height="24"></a>
+<a href="conlife.html"><img src="udo_rg.gif" alt="Conway's Life" border="0" width="24" height="24"></a>
+</body></html>

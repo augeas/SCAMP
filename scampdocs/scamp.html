@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP
+</title>
+<meta name="AppleTitle" content="The Symbian Cellular Automata Machine in Python SCAMP">
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+</head>
+<body>
+
+<img src="udo_nohm.gif" alt="Home" border="0" width="24" height="24">
+<img src="udo_noup.gif" border="0" width="24" height="24">
+<img src="udo_nolf.gif" border="0" width="24" height="24">
+<a href="001.html"><img src="udo_rg.gif" alt="Acknowledgments" border="0" width="24" height="24"></a>
+<hr>
+<h2 align="center">The Symbian Cellular Automata Machine in Python</h2>
+<p align="center"><img src="scamp.gif" border="0" width="90" height="109"></p>
+<p align="center">
+Friday 15th April, 2011<br>
+<br>by<br>
+Giles R. Greenway<br>
+<p>
+<hr>
+<h1><a name="UDOTOC">Contents</a></h1>
+<ul class="content">
+<li><b> 1 <a href="001.html">Acknowledgments</a></b></li>
+<br>&nbsp;
+<li><b> 2 <a href="002.html">Introduction</a></b></li>
+<ul class="content">
+<li> 2.1 <a href="002001.html">What's a cellular automaton?</a></li>
+<li> 2.2 <a href="002002.html">Why? Are you some sort of maniac?</a></li>
+<li> 2.3 <a href="002003.html">Things to do</a></li>
+<br>&nbsp;
+</ul>
+<li><b> 3 <a href="003.html">Installing SCAMP</a></b></li>
+<br>&nbsp;
+<li><b> 4 <a href="004.html">What do all the buttons do?</a></b></li>
+<ul class="content">
+<li> 4.1 <a href="004001.html">Select Automaton</a></li>
+<li> 4.2 <a href="004002.html">Parameters</a></li>
+<li> 4.3 <a href="004003.html">Draw</a></li>
+<ul class="content">
+<li> 4.3.1 <a href="004003001.html">Snapshot</a></li>
+<li> 4.3.2 <a href="004003002.html">Start Recording</a></li>
+<li> 4.3.3 <a href="004003003.html">Finish</a></li>
+<li> 4.3.4 <a href="004003004.html">Stop</a></li>
+</ul>
+<li> 4.4 <a href="004004.html">Seed</a></li>
+<li> 4.5 <a href="004005.html">Seed Parameters</a></li>
+<ul class="content">
+<li> 4.5.1 <a href="004005001.html">One-Dimensional Seeds</a></li>
+<ul class="content">
+<li> 4.5.1.1 <a href="004005001.html#Single_20Defects">Single Defects</a></li>
+<li> 4.5.1.2 <a href="004005001.html#Alternating_20Blocks">Alternating Blocks</a></li>
+<li> 4.5.1.3 <a href="004005001.html#Random">Random</a></li>
+</ul>
+<li> 4.5.2 <a href="004005002.html">Two-Dimensional Seeds</a></li>
+<ul class="content">
+<li> 4.5.2.1 <a href="004005002.html#Single_20Defects">Single Defects</a></li>
+<li> 4.5.2.2 <a href="004005002.html#Tabula_20Rasa">Tabula Rasa</a></li>
+<li> 4.5.2.3 <a href="004005002.html#Random">Random</a></li>
+</ul></ul>
+<li> 4.6 <a href="004006.html">Draw and Record</a></li>
+<li> 4.7 <a href="004007.html">Create Rule</a></li>
+<li> 4.8 <a href="004008.html">Palette</a></li>
+<li> 4.9 <a href="004009.html">Resolution</a></li>
+<li> 4.10 <a href="00400a.html">Set Background</a></li>
+<li> 4.11 <a href="00400b.html">Save</a></li>
+<li> 4.12 <a href="00400c.html">Path</a></li>
+<li> 4.13 <a href="00400d.html">Help</a></li>
+<br>&nbsp;
+</ul>
+<li><b> 5 <a href="005.html">One-dimensional cellular automata</a></b></li>
+<ul class="content">
+<li> 5.1 <a href="sim_1d.html">Simple 1-D</a></li>
+<li> 5.2 <a href="nn_1d.html">Next-Nearest 1-D</a></li>
+<li> 5.3 <a href="total_1d.html">Totalistic 1-D</a></li>
+<li> 5.4 <a href="pascal.html">Pascal's Triangle</a></li>
+<li> 5.5 <a href="skew_pascal.html">Skewed Pascal's Triangle</a></li>
+<li> 5.6 <a href="cyclic_1d.html">Cyclic 1-D</a></li>
+<br>&nbsp;
+</ul>
+<li><b> 6 <a href="006.html">Two-dimensional cellular automata</a></b></li>
+<ul class="content">
+<li> 6.1 <a href="sim_2d.html">Simple 2-D</a></li>
+<li> 6.2 <a href="nn_sim_2d.html">Next-Nearest 2-D</a></li>
+<li> 6.3 <a href="total_2d.html">Totalistic 2-D</a></li>
+<li> 6.4 <a href="conlife.html">Conway's Life</a></li>
+<li> 6.5 <a href="bbrain.html">Brian's Brain</a></li>
+<li> 6.6 <a href="cyc_demon.html">Cyclic Demons</a></li>
+<li> 6.7 <a href="langton.html">Langton's Ant</a></li>
+<li> 6.8 <a href="turmites.html">Turmites</a></li>
+<li> 6.9 <a href="bzr.html">B-Z Reaction</a></li>
+<br>&nbsp;
+</ul>
+<li><b> 7 <a href="biblio.html">References</a></b></li>
+</ul>
+<br>
+<br>
+<hr>
+<img src="udo_nohm.gif" alt="Home" border="0" width="24" height="24">
+<img src="udo_noup.gif" border="0" width="24" height="24">
+<img src="udo_nolf.gif" border="0" width="24" height="24">
+<a href="001.html"><img src="udo_rg.gif" alt="Acknowledgments" border="0" width="24" height="24"></a>
+</body></html>

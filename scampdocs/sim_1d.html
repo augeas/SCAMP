@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Simple 1-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="nn_1d.html" title="5.2 Next-Nearest 1-D">
+<link rel="section" href="total_1d.html" title="5.3 Totalistic 1-D">
+<link rel="section" href="pascal.html" title="5.4 Pascal's Triangle">
+<link rel="section" href="skew_pascal.html" title="5.5 Skewed Pascal's Triangle">
+<link rel="section" href="cyclic_1d.html" title="5.6 Cyclic 1-D">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="005.html" title="One-dimensional cellular automata">
+<link rel="previous" href="005.html" title="One-dimensional cellular automata">
+<link rel="next" href="nn_1d.html" title="Next-Nearest 1-D">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_lf.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_1d.html"><img src="udo_rg.gif" alt="Next-Nearest 1-D" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Simple_201-D">5.1 Simple 1-D</a></h1>
+<p>This is the simplest possible cellular automaton, but it still has
+very interesting properties. Consider a cell in a one-dimensional
+array and its two neighbours, West and East. If each cell has two
+possible states <b>0</b> and <b>1</b>, there are 8 combinations
+(2x2x2 or 2<sup>3</sup>) for each block of three cells. We could say
+that each cell is a <i>binary digit</i> or <i>bit</i>, and that 3
+bits are sufficient to represent the 8 numbers from 0 to 7. Binary is
+base 2, the 0th bit is the units column, the 1st is the twos column
+and the 2nd is the fours column.
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="center" valign="top"></td>
+  <td align="center" valign="top">2<sup>2</sup></td>
+  <td align="center" valign="top">2<sup>1</sup></td>
+  <td align="center" valign="top">2<sup>0</sup></td>
+</tr>
+<tr>
+  <td align="center" valign="top"></td>
+  <td align="center" valign="top">4</td>
+  <td align="center" valign="top">2</td>
+  <td align="center" valign="top">1</td>
+</tr>
+<tr>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">0</td>
+</tr>
+<tr>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">1</td>
+</tr>
+<tr>
+  <td align="center" valign="top">2</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">0</td>
+</tr>
+<tr>
+  <td align="center" valign="top">3</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">1</td>
+</tr>
+<tr>
+  <td align="center" valign="top">4</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">0</td>
+</tr>
+<tr>
+  <td align="center" valign="top">5</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">0</td>
+  <td align="center" valign="top">1</td>
+</tr>
+<tr>
+  <td align="center" valign="top">6</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">0</td>
+</tr>
+<tr>
+  <td align="center" valign="top">7</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">1</td>
+  <td align="center" valign="top">1</td>
+</tr>
+</table></div>
+
+<p>The rule for the system must determine the future state of each
+cell at the centre of each block of three. The are two possibilities
+for each of the eight combinations so there are 256 (2<sup>8</sup>)
+possible rules. The &quot;rule&quot; parameter can take one of the 256
+values from 0 to 255 and can be represented by 8 bits or a
+<i>byte</i>. Each bit corresponds to one of the 8 combinations of 3
+cells. If the bit corresponding to the states of a cell and its
+neighbours is set to <b>1</b>, then the cell's next state will also
+be set to <b>1</b>. A two-dimensional image is produced by using each
+successive line from top to bottom to show the evolution of the array
+of cells. The array wraps around so that the Eastern neighbour of the
+East-most cell is the West-most cell. This is sometimes called a
+<i>periodic boundary condition</i>, and the array can be thought of
+as a ring.
+</p>
+<p>Each of the 256 patterns of bits can be inverted and reflected, so
+there are really only 64 distinct rules. By default, SCAMP starts with
+rule 30 with the initial state of the centre cell set to <b>1</b>.
+Both the numbering convention and rule 30 were popularized by Wolfram
+<a href="biblio.html#Wolfram30">[Wolfram30]</a>. Its pattern is
+chaotic, and although by definition it is not random, it has formed
+the basis of random number generators. The next most notable rule is
+110, which a somewhat controversial proof has shown to be
+<i>universal</i> or <i>Turing complete</i>, that is capable (in
+principle) of performing any computational task <a
+href="biblio.html#Martinez110">[Martinez110]</a>. Rule 90 produces a
+<i>Sierpinksi Gasket</i>, which is also produced by many other
+cellular automaton rules <a
+href="biblio.html#Bourke93">[Bourke93]</a>. Other values will produce
+interesting or aesthetic results.
+</p>
+<p>The &quot;history&quot; parameter allows a cell to be coloured on
+the basis of its past and present states. A value of 0 just plots
+cells in black and white depending on whether they are set to
+<b>1</b> or <b>0</b>. Positive values use that number of bits plus
+one to represent each cell, so a value of 2 will produce
+2<sup>2+1</sup> = 8 colours. After each generation, the number
+representing a cell is shifted one bit to the left, with the 0th bit
+taking the cell's new state. Negative values have a different effect.
+A value of -8 will produce 8 colours. The 0th colour is used if a
+cell's state is <b>0</b>, other colours indicate for how many
+intervals the cell has been in state <b>1</b>.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_lf.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_1d.html"><img src="udo_rg.gif" alt="Next-Nearest 1-D" border="0" width="24" height="24"></a>
+</body></html>

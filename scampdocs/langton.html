@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Langton's Ant
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_2d.html" title="6.1 Simple 2-D">
+<link rel="section" href="nn_sim_2d.html" title="6.2 Next-Nearest 2-D">
+<link rel="section" href="total_2d.html" title="6.3 Totalistic 2-D">
+<link rel="section" href="conlife.html" title="6.4 Conway's Life">
+<link rel="section" href="bbrain.html" title="6.5 Brian's Brain">
+<link rel="section" href="cyc_demon.html" title="6.6 Cyclic Demons">
+<link rel="section" href="turmites.html" title="6.8 Turmites">
+<link rel="section" href="bzr.html" title="6.9 B-Z Reaction">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="cyc_demon.html" title="Cyclic Demons">
+<link rel="previous" href="cyc_demon.html" title="Cyclic Demons">
+<link rel="next" href="turmites.html" title="Turmites">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="cyc_demon.html"><img src="udo_lf.gif" alt="Cyclic Demons" border="0" width="24" height="24"></a>
+<a href="turmites.html"><img src="udo_rg.gif" alt="Turmites" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Langton_27s_20Ant">6.7 Langton's Ant</a></h1>
+<p>Langton's Ant is a special type of cyclic cellular automaton where
+only one cell, the &quot;ant&quot;, updates at a time. The ant starts
+in the centre of the grid in a certain heading. According to the state
+of the cell the ant turns left or right, changes the cell to the next
+state (the highest state becomes state 0) and takes one step forward.
+The &quot;order&quot; parameter gives the number of states,
+&quot;number&quot; determines the direction the ant turns in each
+state. If the ant is in state <i>n</i> it turns right if the
+<i>n</i>th bit of &quot;number&quot; is set, else it turns left. The
+number of steps before the image is updated is given by
+&quot;dt&quot;, &quot;neighbours&quot; chooses between four (0, the
+more interesting option) and eight (1) directions. Many ants will
+settle down to a repetitive sequence of moves called a
+&quot;highway&quot;, with the problem of whether they do or not being
+analogous to the &quot;halting problem&quot; for Turing machines <a
+href="biblio.html#AntyParticles">[AntyParticles]</a>. This has not
+been decided for the 5th 3-state ant. Starting from an empty grid,
+Langton's ant will produce periodically symmetrical patterns if the
+number of states is even and the rule bits consists of pairs of ones
+or zeroes, with the bits considered cyclically <a
+href="biblio.html#TravelAnt">[TravelAnt]</a>:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="right" valign="top">order</td>
+  <td align="right" valign="top">bits</td>
+  <td align="right" valign="top">number</td>
+</tr>
+<tr>
+  <td align="right" valign="top">4</td>
+  <td align="right" valign="top">0011</td>
+  <td align="right" valign="top">3</td>
+</tr>
+<tr>
+  <td align="right" valign="top">4</td>
+  <td align="right" valign="top">0110</td>
+  <td align="right" valign="top">6</td>
+</tr>
+<tr>
+  <td align="right" valign="top">4</td>
+  <td align="right" valign="top">1001</td>
+  <td align="right" valign="top">9</td>
+</tr>
+<tr>
+  <td align="right" valign="top">6</td>
+  <td align="right" valign="top">001100</td>
+  <td align="right" valign="top">12</td>
+</tr>
+<tr>
+  <td align="right" valign="top">6</td>
+  <td align="right" valign="top">110011</td>
+  <td align="right" valign="top">51</td>
+</tr>
+<tr>
+  <td align="right" valign="top">6</td>
+  <td align="right" valign="top">100001</td>
+  <td align="right" valign="top">33</td>
+</tr>
+</table></div>
+
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="cyc_demon.html"><img src="udo_lf.gif" alt="Cyclic Demons" border="0" width="24" height="24"></a>
+<a href="turmites.html"><img src="udo_rg.gif" alt="Turmites" border="0" width="24" height="24"></a>
+</body></html>

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Pascal's Triangle
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_1d.html" title="5.1 Simple 1-D">
+<link rel="section" href="nn_1d.html" title="5.2 Next-Nearest 1-D">
+<link rel="section" href="total_1d.html" title="5.3 Totalistic 1-D">
+<link rel="section" href="skew_pascal.html" title="5.5 Skewed Pascal's Triangle">
+<link rel="section" href="cyclic_1d.html" title="5.6 Cyclic 1-D">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="total_1d.html" title="Totalistic 1-D">
+<link rel="previous" href="total_1d.html" title="Totalistic 1-D">
+<link rel="next" href="skew_pascal.html" title="Skewed Pascal's Triangle">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="total_1d.html"><img src="udo_lf.gif" alt="Totalistic 1-D" border="0" width="24" height="24"></a>
+<a href="skew_pascal.html"><img src="udo_rg.gif" alt="Skewed Pascal's Triangle" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Pascal_27s_20Triangle">5.4 Pascal's Triangle</a></h1>
+<p>Pascal's Triangle <a href="biblio.html#PascalFun">[PascalFun]</a>
+is constructed such that starting with 1 at the top, each number is
+the sum of the two directly above it:
+</p>
+<div align="center">1
+</div>
+<div align="center">1 1
+</div>
+<div align="center">1 2 1
+</div>
+<div align="center">1 3 3 1
+</div>
+<div align="center">1 4 6 4 1
+</div>
+<p>The number of patterns, applications and coincidences related to
+it is almost beyond counting. Eventually, the numbers in each row
+start to get rather large, so we will consider Pascal's triangle using
+<i>modular arithmetic</i>. This means that each entry is the
+remainder when the sum of the two entries above is divided by some
+number or <i>modulo</i>. This makes Pascal's Triangle a special kind
+of totalistic cellular automaton on a hexagonal grid. SCAMP does this
+with square cells by offsetting each row to keep it centered. The
+Pascal's Triangle type takes two parameters, &quot;modulo&quot; and
+&quot;colours&quot;, which can be 0 or 1. If &quot;colours&quot; is 0
+a cell is plotted black if its value is non-zero. If
+&quot;modulo&quot; is greater than 2 and &quot;colours&quot; is set to
+1 then each cell is simply coloured according to its state. Modulo 2
+produces the all-too-familiar Sierpinski Gasket.
+</p>
+<p>As SCAMP needs one more cell after every row, it draws to the
+bottom of the screen without wrapping and stops. It also ignores the
+current seed, and starts with a <b>1</b> in the initial central cell.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="total_1d.html"><img src="udo_lf.gif" alt="Totalistic 1-D" border="0" width="24" height="24"></a>
+<a href="skew_pascal.html"><img src="udo_rg.gif" alt="Skewed Pascal's Triangle" border="0" width="24" height="24"></a>
+</body></html>

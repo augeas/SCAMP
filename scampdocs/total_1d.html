@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Totalistic 1-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_1d.html" title="5.1 Simple 1-D">
+<link rel="section" href="nn_1d.html" title="5.2 Next-Nearest 1-D">
+<link rel="section" href="pascal.html" title="5.4 Pascal's Triangle">
+<link rel="section" href="skew_pascal.html" title="5.5 Skewed Pascal's Triangle">
+<link rel="section" href="cyclic_1d.html" title="5.6 Cyclic 1-D">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="nn_1d.html" title="Next-Nearest 1-D">
+<link rel="previous" href="nn_1d.html" title="Next-Nearest 1-D">
+<link rel="next" href="pascal.html" title="Pascal's Triangle">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_1d.html"><img src="udo_lf.gif" alt="Next-Nearest 1-D" border="0" width="24" height="24"></a>
+<a href="pascal.html"><img src="udo_rg.gif" alt="Pascal's Triangle" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Totalistic_201-D">5.3 Totalistic 1-D</a></h1>
+<p>Consider a one-dimensional cellular automata with some number of
+states <i>N</i>. If we consider only the East and West neighbours,
+that gives <i>N</i><sup>3</sup> combinations and
+<i>N</i><sup><i>N</i><sup>3</sup></sup> possible rules. This means
+that there number of 4-state nearest-neighbour automata is:
+</p>
+<div align="center">340282366920938463463374607431768211456!
+</div>
+<p>With this in mind, Wolfram introduces <i>totalistic cellular
+automata</i> based on the sum of the states of a cell and its
+nearest-neighbours (!cite(WolframTotal)]. The &quot;Totalistic
+1-D&quot; takes two parameters, the &quot;order&quot; or number of
+states and the &quot;rule&quot;. If there are <i>N</i> states from 0
+to <i>N</i>-1, the total cannot be greater than 3<i>N</i>-3,
+although some values less than this may not be possible. A string of
+digits base-<i>N</i> is used to decide the next state of each cell,
+by using the total <i>n</i> to select the <i>n</i>th digit. The
+base-<i>N</i> number is converted to decimal to produce the rule.
+SCAMP defaults to order 3 number 65, which starts out fairly
+interesting, but eventually becomes repetitive.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="nn_1d.html"><img src="udo_lf.gif" alt="Next-Nearest 1-D" border="0" width="24" height="24"></a>
+<a href="pascal.html"><img src="udo_rg.gif" alt="Pascal's Triangle" border="0" width="24" height="24"></a>
+</body></html>

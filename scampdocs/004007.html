@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Create Rule
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="004001.html" title="4.1 Select Automaton">
+<link rel="section" href="004002.html" title="4.2 Parameters">
+<link rel="section" href="004003.html" title="4.3 Draw">
+<link rel="section" href="004004.html" title="4.4 Seed">
+<link rel="section" href="004005.html" title="4.5 Seed Parameters">
+<link rel="section" href="004006.html" title="4.6 Draw and Record">
+<link rel="section" href="004008.html" title="4.8 Palette">
+<link rel="section" href="004009.html" title="4.9 Resolution">
+<link rel="section" href="00400a.html" title="4.10 Set Background">
+<link rel="section" href="00400b.html" title="4.11 Save">
+<link rel="section" href="00400c.html" title="4.12 Path">
+<link rel="section" href="00400d.html" title="4.13 Help">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="004006.html" title="Draw and Record">
+<link rel="previous" href="004006.html" title="Draw and Record">
+<link rel="next" href="004008.html" title="Palette">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="004.html"><img src="udo_up.gif" alt="What do all the buttons do?" border="0" width="24" height="24"></a>
+<a href="004006.html"><img src="udo_lf.gif" alt="Draw and Record" border="0" width="24" height="24"></a>
+<a href="004008.html"><img src="udo_rg.gif" alt="Palette" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Create_20Rule">4.7 Create Rule</a></h1>
+<p>Many of the automaton types work by using a &quot;rule&quot;
+parameter, with each bit corresponding to a possible combination of
+states of a cell and its neighbours. For the &quot;<a href="sim_1d.html">Simple 1-D</a>&quot;
+type, each cell has two neighbours, with eight combinations for each
+block of three, so the rule parameter has eight bits and therefore 256
+possible values. For automata with larger numbers of neighbours, the
+number of possible values of the &quot;rule&quot; parameter becomes
+very large. Exploring them would be very tedious, so a more
+intelligent way of generating the values is needed. This option
+prompts for a logical expression, a function of the state of each cell
+and its neighbours. If the result of this is &quot;true&quot; or
+non-zero, the cells new state will be <b>1</b> or <b>0</b> if it is
+zero or &quot;false&quot;. This feature is available for the
+&quot;<a href="sim_1d.html">Simple 1-D</a>&quot;, &quot;<a href="nn_1d.html">Next-Nearest 1-D</a>&quot;, &quot;Simple
+2-D&quot; and &quot;<a href="nn_sim_2d.html">Next-Nearest 2-D</a>&quot; types. It doesn't have the
+flexibility of Toffoli and Margolus' FORTH-based CAM, <a
+href="biblio.html#ToffoliMargolus87">[ToffoliMargolus87]</a> but it'll
+do. The following variables can be used in each type:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="left" valign="top"><a href="sim_1d.html">Simple 1-D</a></td>
+  <td align="left" valign="top">w c e</td>
+</tr>
+<tr>
+  <td align="left" valign="top"><a href="nn_1d.html">Next-Nearest 1-D</a></td>
+  <td align="left" valign="top">ww w c e ee</td>
+</tr>
+<tr>
+  <td align="left" valign="top"><a href="sim_2d.html">Simple 2-D</a></td>
+  <td align="left" valign="top">c n w s e</td>
+</tr>
+<tr>
+  <td align="left" valign="top"><a href="nn_sim_2d.html">Next-Nearest 2-D</a></td>
+  <td align="left" valign="top">c n ne e se s sw w nw</td>
+</tr>
+</table></div>
+
+<p>These are the operators that are available:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="left" valign="top">+ - *</td>
+  <td align="left" valign="top">addition, subtraction, multiplication</td>
+</tr>
+<tr>
+  <td align="left" valign="top">/</td>
+  <td align="left" valign="top">integer or truncated division</td>
+</tr>
+<tr>
+  <td align="left" valign="top">%</td>
+  <td align="left" valign="top">modular division (gives remainder)</td>
+</tr>
+<tr>
+  <td align="left" valign="top">^</td>
+  <td align="left" valign="top">raise to power</td>
+</tr>
+<tr>
+  <td align="left" valign="top">a o x !</td>
+  <td align="left" valign="top">logical AND, OR, XOR, NOT</td>
+</tr>
+<tr>
+  <td align="left" valign="top">&amp; | $</td>
+  <td align="left" valign="top">bit-wise AND, OR, XOR</td>
+</tr>
+<tr>
+  <td align="left" valign="top">&lt; &gt;</td>
+  <td align="left" valign="top">less or greater than (returns <b>1</b> if true, else <b>0</b>)</td>
+</tr>
+<tr>
+  <td align="left" valign="top">=</td>
+  <td align="left" valign="top">equal to (returns <b>1</b> if true, else <b>0</b>)</td>
+</tr>
+<tr>
+  <td align="left" valign="top">( )</td>
+  <td align="left" valign="top">brackets</td>
+</tr>
+</table></div>
+
+<p>Note: SCAMP has the most shonky implementation of Dijkstra's
+Shunting Algorithm <a href="biblio.html#Dijkstra">[Dijkstra]</a>
+imaginable, adding new automata is much more fun than error-trapping.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="004.html"><img src="udo_up.gif" alt="What do all the buttons do?" border="0" width="24" height="24"></a>
+<a href="004006.html"><img src="udo_lf.gif" alt="Draw and Record" border="0" width="24" height="24"></a>
+<a href="004008.html"><img src="udo_rg.gif" alt="Palette" border="0" width="24" height="24"></a>
+</body></html>

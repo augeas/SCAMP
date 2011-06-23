@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Cyclic 1-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_1d.html" title="5.1 Simple 1-D">
+<link rel="section" href="nn_1d.html" title="5.2 Next-Nearest 1-D">
+<link rel="section" href="total_1d.html" title="5.3 Totalistic 1-D">
+<link rel="section" href="pascal.html" title="5.4 Pascal's Triangle">
+<link rel="section" href="skew_pascal.html" title="5.5 Skewed Pascal's Triangle">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="skew_pascal.html" title="Skewed Pascal's Triangle">
+<link rel="previous" href="skew_pascal.html" title="Skewed Pascal's Triangle">
+<link rel="next" href="006.html" title="Two-dimensional cellular automata">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="skew_pascal.html"><img src="udo_lf.gif" alt="Skewed Pascal's Triangle" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_rg.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Cyclic_201-D">5.6 Cyclic 1-D</a></h1>
+<p>In cyclic cellular automata cells can only switch states in
+sequence. A cell in state <i>N</i> takes the state <i>N</i>+1 if it
+has a neighbour in state <i>N</i>+1. The highest state changes to the
+first state. The &quot;order&quot; parameter gives the number of
+states, the cells' initial states are chosen randomly, ignoring the
+seed settings. Values of four <a
+href="biblio.html#PrimordialCyclic">[PrimordialCyclic]</a> (and
+sometimes 5) can produce aesthetic results, that look almost, but not
+entirely <i>unlike</i> a Bridget Riley. If the &quot;neighbours&quot;
+parameter is set to 1 then one can &quot;cheat&quot; by also
+considering next-nearest neighbours.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="005.html"><img src="udo_up.gif" alt="One-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="skew_pascal.html"><img src="udo_lf.gif" alt="Skewed Pascal's Triangle" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_rg.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+</body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Next-Nearest 2-D
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_2d.html" title="6.1 Simple 2-D">
+<link rel="section" href="total_2d.html" title="6.3 Totalistic 2-D">
+<link rel="section" href="conlife.html" title="6.4 Conway's Life">
+<link rel="section" href="bbrain.html" title="6.5 Brian's Brain">
+<link rel="section" href="cyc_demon.html" title="6.6 Cyclic Demons">
+<link rel="section" href="langton.html" title="6.7 Langton's Ant">
+<link rel="section" href="turmites.html" title="6.8 Turmites">
+<link rel="section" href="bzr.html" title="6.9 B-Z Reaction">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="sim_2d.html" title="Simple 2-D">
+<link rel="previous" href="sim_2d.html" title="Simple 2-D">
+<link rel="next" href="total_2d.html" title="Totalistic 2-D">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="sim_2d.html"><img src="udo_lf.gif" alt="Simple 2-D" border="0" width="24" height="24"></a>
+<a href="total_2d.html"><img src="udo_rg.gif" alt="Totalistic 2-D" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Next-Nearest_202-D">6.2 Next-Nearest 2-D</a></h1>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="center" valign="top">nw</td>
+  <td align="center" valign="top">n</td>
+  <td align="center" valign="top">ne</td>
+</tr>
+<tr>
+  <td align="center" valign="top">w</td>
+  <td align="center" valign="top">c</td>
+  <td align="center" valign="top">e</td>
+</tr>
+<tr>
+  <td align="center" valign="top">sw</td>
+  <td align="center" valign="top">s</td>
+  <td align="center" valign="top">se</td>
+</tr>
+</table></div>
+
+<p>If the nine cells C, N, NE, E, SE, S, SW, W, and NW are
+considered, the number of possible rules becomes enormous. The number
+of bits needed to specify each rule will be 2<sup>9</sup> = 512, so
+the total number of rules will be 2<sup>512</sup>. The decimal
+expression of 512-bit integers is so long that the &quot;Create
+Rule&quot; option cannot be used as before. The rule is expressed by
+the &quot;code&quot; parameter as a string of characters. The
+&quot;history&quot; and &quot;speed&quot; parameters work as before.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="sim_2d.html"><img src="udo_lf.gif" alt="Simple 2-D" border="0" width="24" height="24"></a>
+<a href="total_2d.html"><img src="udo_rg.gif" alt="Totalistic 2-D" border="0" width="24" height="24"></a>
+</body></html>

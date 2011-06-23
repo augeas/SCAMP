@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<!-- last modified on 2011/05/31 -->
+<html lang="en">
+<head>
+<title>
+The Symbian Cellular Automata Machine in Python SCAMP: Turmites
+</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<meta http-equiv="Content-Language" content="en">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta name="Generator" content="UDO 6.4 PL1 for Linux">
+<meta name="Author" content="Giles R. Greenway">
+<link rel="chapter" href="001.html" title="1 Acknowledgments">
+<link rel="chapter" href="002.html" title="2 Introduction">
+<link rel="chapter" href="003.html" title="3 Installing SCAMP">
+<link rel="chapter" href="004.html" title="4 What do all the buttons do?">
+<link rel="chapter" href="005.html" title="5 One-dimensional cellular automata">
+<link rel="chapter" href="006.html" title="6 Two-dimensional cellular automata">
+<link rel="chapter" href="biblio.html" title="7 References">
+<link rel="section" href="sim_2d.html" title="6.1 Simple 2-D">
+<link rel="section" href="nn_sim_2d.html" title="6.2 Next-Nearest 2-D">
+<link rel="section" href="total_2d.html" title="6.3 Totalistic 2-D">
+<link rel="section" href="conlife.html" title="6.4 Conway's Life">
+<link rel="section" href="bbrain.html" title="6.5 Brian's Brain">
+<link rel="section" href="cyc_demon.html" title="6.6 Cyclic Demons">
+<link rel="section" href="langton.html" title="6.7 Langton's Ant">
+<link rel="section" href="bzr.html" title="6.9 B-Z Reaction">
+<link rel="start" href="scamp.html" title="Begin of the document">
+<link rel="home" href="scamp.html" title="Begin of the document">
+<link rel="contents" href="scamp.html#UDOTOC" title="Contents">
+<link rel="toc" href="scamp.html#UDOTOC" title="Contents">
+<link rel="first" href="001.html" title="Acknowledgments">
+<link rel="prev" href="langton.html" title="Langton's Ant">
+<link rel="previous" href="langton.html" title="Langton's Ant">
+<link rel="next" href="bzr.html" title="B-Z Reaction">
+<link rel="last" href="biblio.html" title="References">
+</head>
+<body>
+
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="langton.html"><img src="udo_lf.gif" alt="Langton's Ant" border="0" width="24" height="24"></a>
+<a href="bzr.html"><img src="udo_rg.gif" alt="B-Z Reaction" border="0" width="24" height="24"></a>
+<hr>
+<h1><a name="Turmites">6.8 Turmites</a></h1>
+<p>&quot;Turmites&quot; are two-dimensional Turing machines <a
+href="biblio.html#Turing2d">[Turing2d]</a> or &quot;Turing Mites&quot;
+<a href="biblio.html#Tmites">[Tmites]</a>, similar to Langton's ant.
+The turmites implemented here have two internal states and two
+external states or &quot;colours&quot; on the grid. The turmite's
+internal state and that of the cell it occupies determines the future
+of these states and how its heading changes. The changes in heading
+are described by two bits:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="left" valign="top">heading change</td>
+  <td align="left" valign="top">bits</td>
+</tr>
+<tr>
+  <td align="left" valign="top">none</td>
+  <td align="left" valign="top">00</td>
+</tr>
+<tr>
+  <td align="left" valign="top">turn left</td>
+  <td align="left" valign="top">01</td>
+</tr>
+<tr>
+  <td align="left" valign="top">turn right</td>
+  <td align="left" valign="top">10</td>
+</tr>
+<tr>
+  <td align="left" valign="top">reverse</td>
+  <td align="left" valign="top">11</td>
+</tr>
+</table></div>
+
+<p>The turmite is specified by a 16-bit integer in four 4-bit
+&quot;nibbles&quot;:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="left" valign="top">bit</td>
+  <td align="left" valign="top">3</td>
+  <td align="left" valign="top">2-1</td>
+  <td align="left" valign="top">0</td>
+</tr>
+<tr>
+  <td align="left" valign="top">meaning</td>
+  <td align="left" valign="top">new colour</td>
+  <td align="left" valign="top">heading change</td>
+  <td align="left" valign="top">new state</td>
+</tr>
+</table></div>
+
+<p>The nibbles are combined as follows:
+</p>
+<div align="center"><table border="1" frame="box">
+<tr>
+  <td align="left" valign="top"></td>
+  <td align="left" valign="top">colour 0</td>
+  <td align="left" valign="top">colour 1</td>
+</tr>
+<tr>
+  <td align="left" valign="top">state 0</td>
+  <td align="left" valign="top">3</td>
+  <td align="left" valign="top">2</td>
+</tr>
+<tr>
+  <td align="left" valign="top">state 1</td>
+  <td align="left" valign="top">1</td>
+  <td align="left" valign="top">0</td>
+</tr>
+</table></div>
+
+<p>The &quot;rule&quot; parameter gives the 16-bit integer,
+&quot;neighbours&quot;, &quot;history&quot; and &quot;dt&quot; have
+their previous meanings. Starting from an empty grid, the following
+rules are quite interesting: 52481, 48080, 44355, 56276, 54665, 39632.
+</p>
+<hr>
+<a href="scamp.html"><img src="udo_hm.gif" alt="Home" border="0" width="24" height="24"></a>
+<a href="006.html"><img src="udo_up.gif" alt="Two-dimensional cellular automata" border="0" width="24" height="24"></a>
+<a href="langton.html"><img src="udo_lf.gif" alt="Langton's Ant" border="0" width="24" height="24"></a>
+<a href="bzr.html"><img src="udo_rg.gif" alt="B-Z Reaction" border="0" width="24" height="24"></a>
+</body></html>
