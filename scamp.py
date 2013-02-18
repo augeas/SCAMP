@@ -3,7 +3,7 @@
 # (C) Giles R. Greenway, released under the GNU Public License v3
 #15/04/2011
 
-import appuifw, e32, os, os.path, graphics, random
+import appuifw, e32, os, os.path, graphics, random, re
 
 try:
 	import sysinfo
@@ -21,15 +21,13 @@ except:
 		pass
 
 def openurl(url):
-	if os.path.exists('z:\\system\\programs\\apprun.exe') and os.path.exists('z:\\System\\Apps\\Browser\\Browser.app'):
-		e32.start_exe('z:\\system\\programs\\apprun.exe', 'z:\\System\\Apps\\Browser\\Browser.app'+ ' "%s"' %url,1)
-	else:
-#		url = '4 '+ url + ' 1'
-		e32.start_exe('BrowserNG.exe','4 "%s"' %url, 1)
+	#if os.path.exists('z:\\system\\programs\\apprun.exe') and os.path.exists('z:\\System\\Apps\\Browser\\Browser.app'):
+	#	e32.start_exe('z:\\system\\programs\\apprun.exe', 'z:\\System\\Apps\\Browser\\Browser.app'+ ' "%s"' %url,1)
+	#else:
+	e32.start_exe('BrowserNG.exe','4 "%s"' %url, 1)
 
 class ProgressBar(object):
-    """ Implements a ProgressBar on Canvas
-    """
+    # Implements a ProgressBar on Canvas
     def __init__(self, other_canvas, start=0, end=100,
                  color=(0,0,0), fill=(255,255,255),
                  outline=(0,0,0)):
@@ -111,63 +109,78 @@ class ProgressBar(object):
                                    fill=self.color)
         self.canvas.blit(self.canvas_copy)
 
+##############################################################################
+#						       			     #
+# For a three-by-three array of binary cells,there are 2^9 combinations, and #
+# thus 2^(2^9) possible CA rules.We can do a reasonable quick and cheap job  #
+# of compressing such potentially huge integers by converting them to hex,   #
+# (possibly) run-length encoding them, counting the number of different	     #
+# hex-digits present to reduce the bit-count for each one as much as	     #
+# possible, then encoding them in chunks of six bits using sixty-four	     #
+# characters. Reasonably effective, if not entirely optimal.		     #
+#									     #
+##############################################################################
+
+# 64 characters, each can represent 6 bits.
 codechars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@#'
 
+# Quickly look up the value of each character.
 codedict = dict()
+for i, char in enumerate(codechars):
+	codedict[char] = i
 
-for loop in range(64):
-	codedict[codechars[loop]] = loop
-
+# Run-length encode a hex string.
 def rle(hexstr):
-
 	runchar = hexstr[0]
 	run = 1	
-	outstr = ""
-	
+	outstr = ""	
 	for loop in range(1,len(hexstr)):
 		if hexstr[loop] == runchar:
 			if run < 17:
 				run += 1
 			else:
+			# A run is represented by one repetition of the character, plus a hex digit that gives the length.	
 				outstr += 2*runchar+"f"
 				run = 1
 		else:
 			if run == 1:
+			# A single character represents itself.	
 				outstr += runchar
 			else:
 				outstr += 2*runchar+codechars[run-2]	
 			runchar = hexstr[loop]	
 			run = 1
+	# Add on the final run.			
 	if run == 1:
 		outstr += runchar
 	else:
 		outstr += 2*runchar+codechars[run-2]
 	return outstr
 
+# Run-length decode a hex string.
 def rld(codestr):
-
 	char = 0
 	outstr = ""
-
 	while char<len(codestr)-1:
 		if codestr[char] == codestr[char+1]:
+		# Got a run, add it to the output and skip three chars.
 			outstr += (2+codedict[codestr[char+2]])*codestr[char]
 			char += 3
 		else:
 			outstr += codestr[char]
 			char += 1
-
 	if char < len(codestr):
+	# Any left-overs must be a single char.
 		outstr += codestr[char]
 
 	return outstr
-		
-def crunch(x):
 
+# Code a hex string using a set of 64 chars.
+def crunch(x):
 	chardict = dict()
 	chars = 0
 	present = 0
-
+	# What hex digits are present in the string?
 	for loop in range(16):
 		if codechars[loop] in x:
 			present = present | pow(2,loop)
@@ -175,39 +188,37 @@ def crunch(x):
 			chars += 1
 
 	bits = 1
-
+	# How many bits are needed per character in the string?
 	while (pow(2,bits) < chars):
 		bits += 1
-
+	# Chop the hex string into six-bit chunks represented by a single character.
 	outstr = ""
 	thischar = 0
 	charbits = 0
-
 	for char in x:
-
 		if charbits+bits <= 6:
+		# Room for one more character?	
 			thischar = (thischar << bits) + chardict[char]
 			charbits += bits
-
 		else:
-
+		# Add the character to the ourput and start packing the next one.
 			outstr += codechars[thischar]
 			charbits = bits
 			thischar = chardict[char]
-
+	# Add the final char and work out how many decoded chars to throw away.
 	thischar = thischar << (6-charbits)
-	 
 	outstr += codechars[thischar]
 	spare = (6-charbits)/bits
-
+	# First three chars encode the hex digits present in the string.
 	c3 = codechars[(present>>12)&63]
 	c2 = codechars[(present>>6)&63]
 	c1 = codechars[present&63]
 			
 	return c3+c2+c1+codechars[spare]+outstr
 
+# Recover a "crunched" hex string.
 def decrunch(x):
-
+	# Recover the hex-digits present in the decoded string.
 	present = (codedict[x[0]] & 63) << 12
 	present += codedict[x[1]] << 6
 	present += codedict[x[2]]
@@ -215,20 +226,18 @@ def decrunch(x):
 
 	charlist = list()
 	chars = 0
-
+	# Reconstruct the list of hex digits.
 	for loop in range(16):
 		if pow(2,loop) & present:
 			charlist.append(codechars[loop])
 			chars += 1
-
+	# Find the number of bits per hex digit.
 	bits = 1
-
 	while (pow(2,bits) < chars):
 		bits += 1
-
+	# Decode each char.
 	outstr = ""
 	mask = pow(2,bits) - 1
-
 	for char in x[4:len(x)]:
 
 		charval = codedict[char]
@@ -241,15 +250,17 @@ def decrunch(x):
 
 	return outstr[0:len(outstr)-spare]			
 
+# Decide whether its worth doing the run-length encoding.
 def squeeze(x):
 	y = crunch(rle(x))
 	z = crunch(x)
-
+	# Set the sixth bit of the first char if we're bothering with the RLE.
 	if len(y) <= len(z):
 		return(codechars[codedict[y[0]]|32]+y[1:len(y)])
 	else:
 		return z
 
+# Decode a coded string back to a hex string, with or without RLE.
 def unsqueeze(x):
 	firstchar = codedict[x[0]]
 	if firstchar & 32:
@@ -257,15 +268,15 @@ def unsqueeze(x):
 	else:
 		return decrunch(x)
 
-white = (255,255,255)
-black = (0,0,0)
-grey = (128,128,128)
+##############################################################################
+#						       			     #
+# Tokenize, parse and evaluate simple logical functions on the states of a   #
+# cell and its neighbours.						     #
+#									     #
+##############################################################################
 
-red = (255,0,0)
-yellow = (255,255,0)
-green = (0,255,0)
-blue = (0,0,255)
-violet = (255,0,255)
+# Operators and their precedences: left shift, right shift, multiply, divide, modulo, bitwise AND, bitwise OR, bitwise XOR, logical AND, logical OR,
+# logical XOR, greater than, less than, equal to, plus, minus and logical NOT.
 
 operators = ("l",0),("r",0),("*",1),("/",1),("%",1),("&",2),("|",2),("$",2),("a",2),("o",2),("^",2),("x",2),(">",2),("<",2),("=",2),("+",3),("-",3),("!",4)
 
@@ -281,14 +292,14 @@ legal = digits+chars+ops+brackets
 
 ruletext = ""
 
+# Various token-types:
+
 class variable(object):
 	def __init__(self,s,p):
 		self.type = 2
 		self.prior = 0
 		self.pos = p
 		self.label = s
-	def show(self):
-		print self.label
 
 class operator(object):
 	def __init__(self,s,p):
@@ -298,8 +309,6 @@ class operator(object):
 		for index in range(len(ops)):
 			if s == ops[index]:
 				self.prior = operators[index][1]
-	def show(self):
-		print self.label
 
 class constant(object):
 	def __init__(self,s,p):
@@ -307,8 +316,7 @@ class constant(object):
 		self.prior = 0
 		self.pos = p
 		self.value = eval(s)
-	def show(self):
-		print self.value
+
 	def set_val(self,v):
 		self.value = v
 
@@ -323,18 +331,13 @@ class bracket(object):
 		else:
 			self.left = 0
 
-	def show(self):
-		if self.left:
-			print "("
-		else:
-			print ")"
-
 class error_token(object):
 	def __init__(self):
 		self.type = 5
 		self.prior = 999
 		self.pos = 0
-			
+	
+# Find the token-type of a character:	
 def whatsit(x):
 	for c in digits:
 		if x == c:
@@ -350,6 +353,7 @@ def whatsit(x):
 			return 4
 	return 5
 
+# Make a token from string s from position p of type t.
 def make_token(s,t,p):
 	if t == 1:
 		return constant(s,p)
@@ -362,35 +366,38 @@ def make_token(s,t,p):
 	if t == 5:
 		return error_token()
 
+# Tokenize string "s" given a list of possible variables. 
 def tokenize(s,var_strings):
-	this_token = ""
 	token_list = list()
-	this_token += s[0]
+	# Get the first character.
+	this_token = s[0]
 	token_type = whatsit(this_token)
 	token_pos = 0
 	for index in range(1,len(s)):
 		c = s[index]
 
+		# What sort of token does the next char belong to?
 		char_type = whatsit(c)
 
 		if char_type > 2:
+			# Must be an operator or a bracket. Store the current token and start a new one.
 			token_list.append(make_token(this_token,token_type,token_pos))
 			this_token = c
 			token_type = char_type
 			token_pos = index 
 		else:
 			if char_type == token_type:
+				# The next char could be part of the current token,
 				if token_type == 1:
+					# Two consequtive digits, the number gets longer.
 					this_token += c
 				else:
+					# Does the next char complete a two-char variable?
 					trial = this_token + c
-					match = 0
-					for t in var_strings:
-						if trial == t:
-							match = 1
-					if match:
+					if trial in var_strings:
 						this_token = trial
 					else:
+						# Start a new token.
 						token_list.append(make_token(this_token,token_type,token_pos))
 						this_token = c
 						token_type = char_type
@@ -405,6 +412,7 @@ def tokenize(s,var_strings):
 	token_list.append(make_token(this_token,token_type,token_pos))
 	return token_list
 
+# Shunting algorithim. Take the input string in_str and a list of valid chars, return a stack of tokens ready for evaluation.
 def parse(in_str,valid):
 
 	in_stack = list()
@@ -415,16 +423,16 @@ def parse(in_str,valid):
 
 	in_stack.reverse()
 
-	while len(in_stack) > 0:
+	while len(in_stack) > 0: # Iterate over the input stack.
 		
 		token = in_stack.pop()
 
-		if token.type == 5:
+		if token.type == 5: # Chuck back an error token and quit.
 			out_stack = list()
 			out_stack.append(token)
 			return out_stack
 		
-		if token.type == 1 or token.type == 2:
+		if token.type == 1 or token.type == 2: # Variables and constants go straight on the output stack.
 			out_stack.append(token)
 
 		if token.type == 3:
@@ -438,40 +446,39 @@ def parse(in_str,valid):
 				
 		if token.type == 4:
 			if token.left:
-				op_stack.append(token)
+				op_stack.append(token) # Left brackets go to the operator stack.
 			else:
-
-				while len(op_stack) > 0:
+				while len(op_stack) > 0: # Put the contents on the operator stack on the output stack 'till we find a left bracket. 
 					op_token = op_stack.pop()
 					if op_token.type == 3:
 						out_stack.append(op_token)
 					else:
 						break
 				
-	while len(op_stack) > 0:
+	while len(op_stack) > 0: # Push any leftover operators on the output stack.
 		out_stack.append(op_stack.pop())
 
 	return out_stack
 
-def rp_eval(in_stack,vardict):
+def rp_eval(in_stack,vardict): # Evaluate a suitable stack of tokens, given the values of the variables.
 	out_stack = list()
 	
 	for token in in_stack:
 
-		if token.type == 1:
+		if token.type == 1: # Contants go straight through.
 			out_stack.append(token)
 			
-		if token.type == 2:
+		if token.type == 2: # Push a constant with the varisble's value.
 			out_stack.append(constant(str(vardict[token.label]),token.pos))
 	
 		if token.type == 3:
 
 			toke = constant("0",0)	
-			c2 = out_stack.pop().value
+			c2 = out_stack.pop().value # Take a value from the stack.
 
-			if token.label != "!":
+			if token.label != "!": 
 
-				c1 = out_stack.pop().value
+				c1 = out_stack.pop().value # Binary operaters, take another value.
 				
 				if token.label == "+":
 					toke.set_val(c1+c2)
@@ -488,55 +495,55 @@ def rp_eval(in_stack,vardict):
 					else:
 						toke.set_val(0)
 
-				if token.label == "%":
+				if token.label == "%": # Modular division
 					if c2 != 0:
 						toke.set_val(c1%c2)
 					else:
 						toke.set_val(0)
 				
-				if token.label == "&":
+				if token.label == "&": # Bitwise AND
 					toke.set_val(c1&c2)
 
-				if token.label == "|":
+				if token.label == "|": # Bitwise OR
 					toke.set_val(c1|c2)
 
-				if token.label == "$":
+				if token.label == "$": # Bitwise XOE
 					toke.set_val(c1^c2)
 
-				if token.label == "^":
+				if token.label == "^": # Raise to power
 					toke.set_val(c1**c2)
 
-				if token.label == "a":
+				if token.label == "a": # Logical AND
 					if c1 and c2:
 						toke.set_val(1)
 					else:
 						toke.set_val(0)
 
-				if token.label == "o":
+				if token.label == "o": # Logical OR
 					if c1 or c2:
 						toke.set_val(1)
 					else:
 						toke.set_val(0)
 
-				if token.label == "x":
+				if token.label == "x": # Logical XOR
 					if (c1 or c2) and not (c1 and c2):
 						toke.set_val(1)
 					else:
 						toke.set_val(0)
 
-				if token.label == ">":
+				if token.label == ">": # Greater than
 					if c1 > c2:
 						toke.set_val(1)
 					else:
 						toke.set_val(0)
 
-				if token.label == "<":
+				if token.label == "<": # Less than
 					if c1 > c2:
 						toke.set_val(1)
 					else:
 						toke.set_val(0)
 
-				if token.label == "=":
+				if token.label == "=": # Equality
 					if c1 == c2:
 						toke.set_val(1)
 					else:
@@ -547,9 +554,19 @@ def rp_eval(in_stack,vardict):
 				else:
 					toke.set_val(1)
 
-			out_stack.append(toke)
+			out_stack.append(toke) # Put the result of the operation on the output stack.
 	
-	return out_stack.pop().value
+	return out_stack.pop().value 
+
+white = (255,255,255)
+black = (0,0,0)
+grey = (128,128,128)
+
+red = (255,0,0)
+yellow = (255,255,0)
+green = (0,255,0)
+blue = (0,0,255)
+violet = (255,0,255)
 
 class palette(object):
 	def __init__(self,order):
@@ -708,7 +725,10 @@ class ca_seed(object):
 
 		fields = []
 		for index in self.pars:
-			fields.append((index.name, 'number',index.value))
+			if index.maxi == -1 and index.mini == -1:
+				fields.append((index.name, 'text',index.value))
+			else:
+				fields.append((index.name, 'number',index.value))
 		self.pform = appuifw.Form(fields,
 		appuifw.FFormEditModeOnly)
 	        self.pform.save_hook = validate_seed
@@ -1171,6 +1191,57 @@ class ca_2d(ca_base):
 
 		if two_d_seeds[chosen_seed].name == "tabularasa":
 			pass
+		
+		if two_d_seeds[chosen_seed].name == "gradient":
+			x0 = two_d_seeds[chosen_seed].values['x0']
+			x1 = two_d_seeds[chosen_seed].values['x1']
+			y0 = two_d_seeds[chosen_seed].values['y0']
+			y1 = two_d_seeds[chosen_seed].values['y1']
+			
+			xc = w/2
+			yc = h/2
+			
+			dx = (x1-x0) / xc
+			dy = (y1-y0) / yc
+			
+			for x in range(w):
+				xprob = x0 + dx*abs(xc - x)
+				for y in range(h):
+					yprob = y0 + dy*abs(yc - y)
+					if random.choice(range(1000)) < xprob and random.choice(range(1000)) < yprob:
+						self.init_state(x,y,1)
+
+		if two_d_seeds[chosen_seed].name == "bitmap":
+			mapcols = two_d_seeds[chosen_seed].values['cols']
+			mapwidth = 4 * mapcols
+			xjust = two_d_seeds[chosen_seed].values['xjust'] 
+			if xjust == 0:
+				xstart = w/2 - mapwidth/2
+			if xjust == 1:
+				xstart = 0
+			if xjust == 2:
+				xstart = w - mapwidth
+			mapchars = two_d_seeds[chosen_seed].values['bits']
+			mapheight = len(mapchars) / mapcols 
+			yjust = two_d_seeds[chosen_seed].values['yjust'] 
+			if yjust == 0:
+				ystart = h/2 - mapheight/2
+			if yjust == 1:
+				ystart = 0
+			if yjust == 2:
+				ystart = h - mapheight
+
+			for y in range(mapheight):
+				charpos = y*mapcols
+				rowchars = mapchars[charpos:charpos+mapcols]
+				rowpixels = []
+				for char in rowchars:
+					charval = eval('0x'+char)
+					rowpixels += [ (charval & bit) <> 0 for bit in [8,4,2,1] ]
+				for x in range(mapwidth):
+					if rowpixels[x]:
+						self.init_state(xstart+x,ystart+y,1)
+				
 
 	def change(self,x,y):
 		cell = self.state(x,y)
@@ -1826,8 +1897,7 @@ def validate(state):
 
 	for index in range(len(state)):
 		if automaton.pars[index].name != u"code":
-			automaton.values[automaton.pars[index].name
-			] = int(state[index][2])
+			automaton.values[automaton.pars[index].name] = int(state[index][2])
 		else:
 			automaton.values[automaton.pars[index].name] = state[index][2]
 
@@ -1844,22 +1914,30 @@ def validate_seed(state):
 		par_list = two_d_seeds[chosen_seed].pars
 
 	for index in range(len(state)):
-		if state[index][2] > par_list[index].maxi:
+		if par_list[index].mini == -1 and par_list[index].maxi == -1:
+			for char in str(state[index][2]):
+				if char.lower() not in '0123456789abcdef':
+					e32.ao_yield()	
+					return False
+			continue
+		
+		if int(state[index][2]) > par_list[index].maxi:
 			e32.ao_yield()	
 			return False
-		if state[index][2] < par_list[index].mini:
+		if int(state[index][2]) < par_list[index].mini:
 			e32.ao_yield()	
 			return False
 
 	if automaton.seed_type == 1:
 		for index in range(len(state)):
-			one_d_seeds[chosen_seed].values[one_d_seeds[chosen_seed].pars[index].name
-			] = int(state[index][2])
+			one_d_seeds[chosen_seed].values[one_d_seeds[chosen_seed].pars[index].name] = int(state[index][2])
 
 	if automaton.seed_type == 2:
 		for index in range(len(state)):
-			two_d_seeds[chosen_seed].values[two_d_seeds[chosen_seed].pars[index].name
-			] = int(state[index][2])
+			if par_list[index].mini == -1 and par_list[index].maxi == -1:
+				two_d_seeds[chosen_seed].values[two_d_seeds[chosen_seed].pars[index].name] = state[index][2]
+			else:	
+				two_d_seeds[chosen_seed].values[two_d_seeds[chosen_seed].pars[index].name] = int(state[index][2])
 
 	e32.ao_yield()	
 	return True
@@ -2129,7 +2207,10 @@ def rule_gen():
 	var_count = len(valid_vars)
 	rule_bits = pow(2,var_count)
 
-	ruletext = appuifw.query(u"Enter a function:","text",unicode(ruletext))
+	ruletext = appuifw.query(u"Enter a function:","text",unicode(ruletext)).lower()
+
+	ruletext = re.sub("v","(n+s+w+e)",ruletext)
+	ruletext = re.sub("m","(n+s+w+e+ne+nw+se+sw)",ruletext)
 
 	if ruletext:
 
@@ -2231,8 +2312,10 @@ for proto in ca_proto:
 one_d_seeds = [ca_seed(1,u"Single Defects","singledefect",[(u"number",1,0,64),(u"separation",0,0,128),(u"justify",0,0,2)]),ca_seed(1,u"Alternating Blocks","altblocks",[(u"on",2,1,64),(u"off",2,1,64),(u"number",0,0,64)]),ca_seed(1,u"Random","rand",[(u"probability",500,0,1000),(u"width",0,0,240)]),ca_seed(1,u"Bit String","bits",
 [(u"left",0,0,255),(u"right",0,0,255),(u"justify",0,0,2)])]
 
-two_d_seeds = [ca_seed(2,u"Single Defects","singledefect",[(u"xnumber",1,0,64),(u"ynumber",1,0,64),(u"xsep",0,0,128),(u"ysep",0,0,128)]),ca_seed(2,u"Tabula Rasa","tabularasa",[(u"null",0,0,0)]),
-ca_seed(2,u"Random","rand",[(u"probability",500,0,1000)])]
+two_d_seeds = [ca_seed(2,u"Single Defects","singledefect",[(u"xnumber",1,0,64),(u"ynumber",1,0,64),(u"xsep",0,0,128),(u"ysep",0,0,128)]),
+ca_seed(2,u"Tabula Rasa","tabularasa",[(u"null",0,0,0)]),ca_seed(2,u"Random","rand",[(u"probability",500,0,1000)]),
+ca_seed(2,u"Gradient","gradient",[(u"x0",1000,0,1000),(u"x1",0,0,1000),(u"y0",1000,0,1000),(u"y1",0,0,1000)]),
+ca_seed(2,u"Bit Map","bitmap",[(u"bits",u"362",-1,-1),(u"cols",1,1,64),(u"xjust",0,0,2),(u"yjust",0,0,2)])]
 
 pal_list = (u"Sprectrum",[red,yellow,green,blue,violet]),(u"RGB",[red,green,blue]),(u"RYGB",[red,yellow,green,blue]),(u"Greys",[white,black]),(u"Fire",[red,midcol(red,yellow),yellow,white]),(u"Water",[blue,midcol(blue,green),green,white]),(u"Desert",[midcol(black,red),midcol(red,yellow),yellow,white,midcol(green,blue),blue]),(u"Wood",[midcol(black,red),midcol(red,yellow),yellow]),(u"Lava",[black,white,yellow,red,midcol(red,black)]),(u"Matrix",[black,green,midcol(green,white)])
 pal_lables = []
