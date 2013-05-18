@@ -2360,7 +2360,7 @@ appuifw.app.orientation = 'automatic'
 
 appuifw.app.screen = 'large'
 
-appuifw.directional_pad = False
+appuifw.app.directional_pad = False
 
 images = [0, 0]
 
